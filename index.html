@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tư Duy Logic — 100 Khái Niệm Nền Tảng</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FAFAF8;
+  --bg2:#F3F3EF;
+  --bg3:#EAEAE4;
+  --white:#FFFFFF;
+  --border:#E0DED8;
+  --border2:#CCCBC4;
+  --text:#1A1A2E;
+  --text2:#4A4A5E;
+  --text3:#888898;
+  --text4:#ABABBB;
+  /* Category colors */
+  --c1:#2B4EAA; --c1b:#EEF2FB; --c1t:#1A3580;
+  --c2:#1565C0; --c2b:#E8F1FB; --c2t:#0D47A1;
+  --c3:#1A8A5C; --c3b:#E8F6EF; --c3t:#116644;
+  --c4:#C62828; --c4b:#FDEAEA; --c4t:#8B1A1A;
+  --c5:#E65100; --c5b:#FEF0E6; --c5t:#B53D00;
+  --c6:#6A3DB8; --c6b:#F2EDF9; --c6t:#4A2290;
+  --c7:#006064; --c7b:#E0F5F5; --c7t:#003D40;
+  --c8:#AD1457; --c8b:#FCEAF1; --c8t:#7B0D3E;
+  --c9:#E65C00; --c9b:#FEF3E8; --c9t:#AA4200;
+  --c10:#455A64; --c10b:#EEF2F4; --c10t:#263238;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+::selection{background:#2B4EAA22;color:var(--c1t);}
+
+/* ── HERO ── */
+.hero{
+  background:var(--white);
+  border-bottom:2px solid var(--c1);
+  padding:3.5rem 5rem 3rem;
+  position:relative;
+  overflow:hidden;
+}
+.hero-top-rule{height:3px;background:linear-gradient(90deg,var(--c1) 0%,var(--c3) 33%,var(--c6) 66%,var(--c4) 100%);position:absolute;top:0;left:0;right:0;}
+.hero-label{
+  font-family:'Fira Code',monospace;font-size:11px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--c1);margin-bottom:1rem;
+  display:flex;align-items:center;gap:10px;
+}
+.hero-label-line{width:28px;height:1px;background:var(--c1);}
+.hero-title-wrap{display:flex;align-items:baseline;gap:1.5rem;margin-bottom:.75rem;flex-wrap:wrap;}
+.hero h1{
+  font-family:'Fraunces',serif;font-size:clamp(2.8rem,6vw,5.5rem);
+  font-weight:700;line-height:.95;letter-spacing:-.02em;color:var(--text);
+}
+.hero h1 em{font-style:italic;color:var(--c1);}
+.hero-subtitle-block{
+  display:flex;align-items:flex-start;gap:3rem;margin-top:1.5rem;flex-wrap:wrap;
+}
+.hero-desc{
+  font-size:15px;color:var(--text2);line-height:1.75;max-width:520px;
+  font-weight:400;flex:1;
+}
+.hero-stats-row{display:flex;gap:0;border:1px solid var(--border);flex-shrink:0;height:fit-content;}
+.hstat{padding:14px 22px;border-right:1px solid var(--border);text-align:center;}
+.hstat:last-child{border-right:none;}
+.hstat-n{font-family:'Fraunces',serif;font-size:2rem;font-weight:600;color:var(--c1);line-height:1;display:block;}
+.hstat-l{font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);display:block;margin-top:2px;}
+
+/* ── TOOLBAR ── */
+.toolbar{
+  position:sticky;top:0;z-index:200;background:var(--white);
+  border-bottom:1px solid var(--border);
+  padding:.7rem 5rem;display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;
+  box-shadow:0 1px 8px rgba(0,0,0,.06);
+}
+.search-wrap{position:relative;flex:1;min-width:180px;max-width:320px;}
+.search-ico{position:absolute;left:10px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text4);}
+#searchInput{
+  width:100%;padding:8px 12px 8px 34px;
+  border:1px solid var(--border2);border-radius:6px;
+  background:var(--bg);font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px;color:var(--text);outline:none;transition:border-color .2s;
+}
+#searchInput:focus{border-color:var(--c1);background:var(--white);}
+#searchInput::placeholder{color:var(--text4);}
+.chips{display:flex;gap:5px;flex-wrap:wrap;}
+.chip{
+  font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.06em;
+  padding:5px 11px;border-radius:20px;border:1px solid var(--border2);
+  background:var(--white);color:var(--text3);cursor:pointer;
+  transition:all .15s;white-space:nowrap;
+}
+.chip:hover{border-color:var(--c1);color:var(--c1);}
+.chip.active{background:var(--c1);border-color:var(--c1);color:#fff;}
+.toolbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.count-badge{
+  font-family:'Fira Code',monospace;font-size:10px;color:var(--text3);
+  padding:4px 10px;border:1px solid var(--border);border-radius:20px;
+  background:var(--bg2);letter-spacing:.05em;
+}
+.view-toggle{display:flex;border:1px solid var(--border2);border-radius:6px;overflow:hidden;}
+.vbtn{
+  padding:5px 10px;background:var(--white);border:none;color:var(--text3);
+  cursor:pointer;transition:all .15s;font-size:13px;
+}
+.vbtn.on{background:var(--c1);color:#fff;}
+
+/* ── LAYOUT ── */
+.layout{display:flex;}
+/* SIDEBAR */
+.sidebar{
+  width:230px;flex-shrink:0;border-right:1px solid var(--border);
+  position:sticky;top:49px;height:calc(100vh - 49px);overflow-y:auto;
+  background:var(--white);padding:1rem 0;
+}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);}
+.sb-sect-label{
+  font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--text4);padding:.6rem 1.25rem .25rem;
+  margin-top:.5rem;
+}
+.sb-item{
+  display:flex;align-items:center;gap:8px;
+  padding:6px 1.25rem;cursor:pointer;font-size:12.5px;
+  color:var(--text2);transition:all .15s;font-weight:500;
+  border-left:3px solid transparent;
+}
+.sb-item:hover{background:var(--bg2);color:var(--text);}
+.sb-item.on{background:var(--bg2);border-left-color:var(--active-c,var(--c1));color:var(--active-c,var(--c1));}
+.sb-pip{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.sb-ct{margin-left:auto;font-family:'Fira Code',monospace;font-size:9px;color:var(--text4);}
+
+/* ── MAIN ── */
+.main{flex:1;padding:2.5rem 4rem 4rem;min-width:0;}
+
+/* ── CATEGORY SECTION ── */
+.cat-section{margin-bottom:3.5rem;}
+.cat-header{
+  display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;
+  padding-bottom:.875rem;border-bottom:1.5px solid var(--cat-c,var(--c1));
+}
+.cat-icon{
+  width:36px;height:36px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;flex-shrink:0;font-family:'Fira Code',monospace;font-weight:500;
+}
+.cat-label-wrap{}
+.cat-num{font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--text3);}
+.cat-title{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:600;line-height:1;color:var(--text);margin-top:2px;}
+.cat-count{margin-left:auto;font-family:'Fira Code',monospace;font-size:10px;color:var(--text3);letter-spacing:.08em;}
+.cat-desc{font-size:13px;color:var(--text3);margin-bottom:1.25rem;font-style:italic;line-height:1.55;}
+
+/* ── CARD GRID ── */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:12px;}
+.card-grid.list{grid-template-columns:1fr;gap:8px;}
+
+/* ── CONCEPT CARD ── */
+.ccard{
+  background:var(--white);border:1px solid var(--border);
+  border-radius:10px;padding:16px 18px;cursor:pointer;
+  transition:border-color .18s,box-shadow .18s,transform .18s;
+  position:relative;overflow:hidden;
+}
+.ccard::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2.5px;
+  background:var(--cc,var(--c1));opacity:0;transition:opacity .18s;
+  border-radius:10px 10px 0 0;
+}
+.ccard:hover{border-color:var(--cc,var(--c1));box-shadow:0 4px 20px rgba(0,0,0,.08);transform:translateY(-1px);}
+.ccard:hover::after{opacity:1;}
+.ccard-top{display:flex;align-items:center;gap:8px;margin-bottom:9px;}
+.ccard-num{
+  font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.05em;
+  padding:2px 8px;border-radius:4px;font-weight:500;
+  background:var(--cc-bg,var(--c1b));color:var(--cc,var(--c1));
+}
+.ccard-badge{
+  font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.08em;
+  padding:2px 7px;border-radius:4px;text-transform:uppercase;
+  background:var(--bg2);color:var(--text3);border:1px solid var(--border);
+}
+.ccard-badge.core{background:#FFF8E1;color:#B8860B;border-color:#F0D060;}
+.ccard-title{
+  font-family:'Fraunces',serif;font-size:1.05rem;font-weight:600;
+  line-height:1.25;margin-bottom:5px;color:var(--text);
+}
+.ccard-en{
+  font-family:'Fira Code',monospace;font-size:10px;color:var(--cc,var(--c1));
+  margin-bottom:7px;letter-spacing:.03em;
+}
+.ccard-tagline{font-size:12.5px;color:var(--text2);line-height:1.5;}
+.ccard-notation{
+  margin-top:10px;padding:6px 10px;border-radius:5px;
+  background:var(--bg2);border-left:2px solid var(--cc,var(--c1));
+  font-family:'Fira Code',monospace;font-size:11px;color:var(--text3);
+  letter-spacing:.02em;
+}
+/* LIST VIEW */
+.card-grid.list .ccard{display:flex;align-items:center;gap:16px;padding:12px 16px;}
+.card-grid.list .ccard .ccard-body{flex:1;min-width:0;}
+.card-grid.list .ccard .ccard-notation{display:none;}
+.card-grid.list .ccard::after{top:0;left:0;bottom:0;right:auto;width:3px;height:auto;border-radius:10px 0 0 10px;}
+
+/* ── MODAL ── */
+.modal-veil{
+  display:none;position:fixed;inset:0;
+  background:rgba(26,26,46,.45);z-index:1000;
+  align-items:center;justify-content:center;padding:1.5rem;
+  backdrop-filter:blur(6px);
+}
+.modal-veil.open{display:flex;}
+.modal{
+  background:var(--white);border-radius:14px;
+  max-width:680px;width:100%;max-height:90vh;overflow-y:auto;
+  box-shadow:0 20px 60px rgba(0,0,0,.18),0 0 0 1px var(--border);
+  animation:mopen .22s cubic-bezier(.16,1,.3,1);
+}
+.modal::-webkit-scrollbar{width:4px;}
+.modal::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px;}
+@keyframes mopen{from{opacity:0;transform:scale(.96) translateY(16px)}to{opacity:1;transform:none}}
+
+.modal-stripe{height:4px;border-radius:14px 14px 0 0;background:var(--mcat-c,var(--c1));}
+.modal-head{padding:1.75rem 2rem 1.25rem;border-bottom:1px solid var(--border);}
+.modal-meta-row{display:flex;align-items:center;gap:8px;margin-bottom:.875rem;flex-wrap:wrap;}
+.modal-cat-badge{
+  font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.1em;
+  text-transform:uppercase;padding:3px 10px;border-radius:5px;
+}
+.modal-core{background:#FFF8E1;color:#B8860B;border:1px solid #F0D060;font-family:'Fira Code',monospace;font-size:10px;letter-spacing:.05em;padding:3px 10px;border-radius:5px;}
+.modal-num{font-family:'Fira Code',monospace;font-size:11px;color:var(--text3);}
+.modal-title{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;letter-spacing:-.01em;line-height:1.1;margin-bottom:.3rem;}
+.modal-en{font-family:'Fira Code',monospace;font-size:12px;color:var(--mcat-c,var(--c1));margin-bottom:.5rem;}
+.modal-tagline{font-size:14.5px;color:var(--text2);font-style:italic;line-height:1.55;}
+.modal-notation-big{
+  margin-top:1rem;padding:10px 14px;border-radius:7px;
+  background:var(--bg2);border-left:3px solid var(--mcat-c,var(--c1));
+  font-family:'Fira Code',monospace;font-size:13px;color:var(--text2);
+  letter-spacing:.03em;
+}
+
+.modal-body{padding:1.5rem 2rem;}
+.msec{margin-bottom:1.5rem;}
+.msec-lbl{
+  font-family:'Fira Code',monospace;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--text4);margin-bottom:.625rem;
+  display:flex;align-items:center;gap:8px;
+}
+.msec-lbl::after{content:'';flex:1;height:1px;background:var(--border);}
+.msec-p{font-size:14px;color:var(--text2);line-height:1.8;}
+.msec-list{list-style:none;padding:0;}
+.msec-list li{
+  font-size:13.5px;color:var(--text2);line-height:1.65;
+  padding:6px 0 6px 18px;border-bottom:1px solid var(--border);
+  position:relative;
+}
+.msec-list li:last-child{border-bottom:none;}
+.msec-list li::before{content:'·';position:absolute;left:4px;color:var(--mcat-c,var(--c1));font-size:1.3em;line-height:1.3;}
+.msec-example{
+  background:var(--bg2);border-radius:8px;padding:13px 15px;
+  font-size:13.5px;color:var(--text2);line-height:1.7;border-left:3px solid var(--mcat-c,var(--c1));
+}
+.msec-example strong{color:var(--text);font-weight:600;}
+.msec-formula{
+  font-family:'Fira Code',monospace;font-size:13px;
+  background:var(--bg);border:1px solid var(--border2);border-radius:7px;
+  padding:12px 16px;color:var(--text2);line-height:1.6;
+}
+.msec-warning{
+  background:#FDEAEA;border-left:3px solid var(--c4);border-radius:0 7px 7px 0;
+  padding:10px 14px;font-size:13px;color:#7A1A1A;line-height:1.6;
+}
+.msec-quote{
+  font-family:'Fraunces',serif;font-size:15px;font-style:italic;
+  color:var(--text2);padding:10px 16px;border-left:3px solid var(--mcat-c,var(--c1));
+  background:var(--bg2);border-radius:0 7px 7px 0;line-height:1.6;
+}
+.related-chips{display:flex;flex-wrap:wrap;gap:6px;}
+.rel-chip{
+  font-size:12px;padding:4px 11px;border-radius:20px;
+  border:1px solid var(--border2);background:var(--bg);color:var(--text2);
+  cursor:pointer;transition:all .15s;font-family:'Fira Code',monospace;
+}
+.rel-chip:hover{border-color:var(--mcat-c,var(--c1));color:var(--mcat-c,var(--c1));background:var(--white);}
+.modal-foot{
+  padding:1rem 2rem 1.25rem;border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+}
+.nav-group{display:flex;gap:6px;}
+.mbtn{
+  font-family:'Fira Code',monospace;font-size:11px;letter-spacing:.06em;
+  padding:7px 16px;border-radius:6px;border:1px solid var(--border2);
+  background:var(--white);color:var(--text2);cursor:pointer;transition:all .15s;
+}
+.mbtn:hover{border-color:var(--mcat-c,var(--c1));color:var(--mcat-c,var(--c1));}
+.mbtn.primary{background:var(--mcat-c,var(--c1));border-color:var(--mcat-c,var(--c1));color:#fff;}
+.mbtn.primary:hover{opacity:.88;}
+.esc-note{font-family:'Fira Code',monospace;font-size:9px;color:var(--text4);letter-spacing:.1em;text-align:center;padding-bottom:.875rem;}
+
+/* ── EMPTY ── */
+.empty-state{text-align:center;padding:5rem 2rem;}
+.empty-state h3{font-family:'Fraunces',serif;font-size:1.5rem;color:var(--text3);margin-bottom:.5rem;}
+.empty-state p{font-family:'Fira Code',monospace;font-size:12px;color:var(--text4);}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:5px;height:5px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--text4);}
+
+@media(max-width:900px){
+  .hero,.toolbar{padding-left:1.5rem;padding-right:1.5rem;}
+  .sidebar{display:none;}
+  .main{padding:1.5rem;}
+  .hero-stats-row{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-top-rule"></div>
+  <div class="hero-label"><span class="hero-label-line"></span>Cẩm nang tư duy · 2024</div>
+  <div class="hero-title-wrap">
+    <h1>Tư Duy<br><em>Logic</em></h1>
+  </div>
+  <div class="hero-subtitle-block">
+    <p class="hero-desc">100 khái niệm nền tảng về tư duy logic — từ suy luận hình thức đến ngụy biện, từ nhận thức luận đến siêu nhận thức. Được xây dựng như một từ điển học thuật có thể tra cứu và học theo.</p>
+    <div class="hero-stats-row">
+      <div class="hstat"><span class="hstat-n">100</span><span class="hstat-l">Khái niệm</span></div>
+      <div class="hstat"><span class="hstat-n">10</span><span class="hstat-l">Chủ đề</span></div>
+      <div class="hstat"><span class="hstat-n">★ 28</span><span class="hstat-l">Cốt lõi</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <div class="search-wrap">
+    <svg class="search-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input id="searchInput" type="text" placeholder="Tìm khái niệm, ví dụ...">
+  </div>
+  <div class="chips" id="chips">
+    <button class="chip active" data-f="all">Tất cả</button>
+    <button class="chip" data-f="core">★ Cốt lõi</button>
+  </div>
+  <div class="toolbar-right">
+    <span class="count-badge" id="cntBadge">100 khái niệm</span>
+    <div class="view-toggle">
+      <button class="vbtn on" id="gBtn" onclick="setView('grid')" title="Lưới">⊞</button>
+      <button class="vbtn" id="lBtn" onclick="setView('list')" title="Danh sách">☰</button>
+    </div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main" id="mainArea"></main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-veil" id="veil" onclick="veilClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-stripe" id="mStripe"></div>
+    <div class="modal-head" id="mHead"></div>
+    <div class="modal-body" id="mBody"></div>
+    <div class="modal-foot" id="mFoot"></div>
+    <div class="esc-note">ESC · ← →</div>
+  </div>
+</div>
+
+<script>
+const CATS = [
+  { id:'c1', color:'var(--c1)', bg:'var(--c1b)', label:'Nền tảng Logic', en:'Foundations of Logic', icon:'∴', num:'01' },
+  { id:'c2', color:'var(--c2)', bg:'var(--c2b)', label:'Suy luận Diễn dịch', en:'Deductive Reasoning', icon:'⊢', num:'02' },
+  { id:'c3', color:'var(--c3)', bg:'var(--c3b)', label:'Suy luận Quy nạp', en:'Inductive Reasoning', icon:'⇒', num:'03' },
+  { id:'c4', color:'var(--c4)', bg:'var(--c4b)', label:'Ngụy biện Hình thức', en:'Formal Fallacies', icon:'⊭', num:'04' },
+  { id:'c5', color:'var(--c5)', bg:'var(--c5b)', label:'Ngụy biện Phi hình thức', en:'Informal Fallacies', icon:'≁', num:'05' },
+  { id:'c6', color:'var(--c6)', bg:'var(--c6b)', label:'Tư duy Phản biện', en:'Critical Thinking', icon:'◈', num:'06' },
+  { id:'c7', color:'var(--c7)', bg:'var(--c7b)', label:'Logic Toán học', en:'Mathematical Logic', icon:'∀', num:'07' },
+  { id:'c8', color:'var(--c8)', bg:'var(--c8b)', label:'Nhận thức luận', en:'Epistemology', icon:'◉', num:'08' },
+  { id:'c9', color:'var(--c9)', bg:'var(--c9b)', label:'Lý luận Thực tiễn', en:'Practical Reasoning', icon:'⚖', num:'09' },
+  { id:'c10',color:'var(--c10)',bg:'var(--c10b)',label:'Siêu nhận thức', en:'Metacognition', icon:'∞', num:'10' },
+];
+
+const DATA = [
+{id:1,cat:'c1',core:true,
+  title:'Mệnh đề',en:'Proposition',
+  tagline:'Phát biểu có thể đánh giá là đúng hoặc sai',
+  notation:'P, Q, R — mệnh đề cơ bản',
+  desc:'Mệnh đề (proposition) là đơn vị cơ bản nhất của logic — một phát biểu xác định có giá trị chân lý xác định: hoặc đúng (True) hoặc sai (False). Không phải câu hỏi, lệnh hay cảm thán.',
+  points:['Mệnh đề đơn: "Hà Nội là thủ đô của Việt Nam" → Đúng','Mệnh đề ghép: kết hợp nhiều mệnh đề bằng liên từ logic','Giá trị chân lý: mỗi mệnh đề chỉ có đúng một trong hai giá trị T/F','Phân biệt với câu hỏi: "Hà Nội có đẹp không?" không phải mệnh đề'],
+  example:'"Mặt trời mọc ở phía Đông" → Mệnh đề Đúng\n"Uống nước nhé!" → KHÔNG phải mệnh đề (lệnh)\n"2 + 2 = 5" → Mệnh đề Sai (vẫn là mệnh đề vì có thể xét T/F)',
+  formula:'∀P: P = True hoặc P = False (luật bài trung)',
+  related:['Giá trị chân lý','Liên từ logic','Luật bài trung']},
+
+{id:2,cat:'c1',core:true,
+  title:'Lập luận',en:'Argument',
+  tagline:'Tập hợp tiền đề dẫn đến kết luận qua suy luận',
+  notation:'P1, P2 ... Pn ⊢ C',
+  desc:'Lập luận là cấu trúc gồm một hoặc nhiều tiền đề (premises) và một kết luận (conclusion). Tiền đề là cơ sở, kết luận là điều được rút ra. Logic nghiên cứu khi nào lập luận là hợp lệ và khi nào không.',
+  points:['Tiền đề (Premise): phát biểu được đưa ra như bằng chứng','Kết luận (Conclusion): điều được khẳng định dựa trên tiền đề','Chỉ thị kết luận: "vì vậy", "do đó", "cho nên"','Phân biệt: lập luận ≠ tranh cãi (argument ≠ quarrel)'],
+  example:'Tiền đề 1: "Mọi người đều phải chết"\nTiền đề 2: "Socrates là người"\nKết luận: "Vì vậy, Socrates phải chết" ← cổ điển nhất lịch sử logic',
+  formula:'P1 ∧ P2 → C (nếu P1 và P2 đúng, C phải đúng)',
+  related:['Tính hiệu lực','Tính vững chắc','Tiền đề']},
+
+{id:3,cat:'c1',core:true,
+  title:'Tính hiệu lực',en:'Validity',
+  tagline:'Cấu trúc lập luận đúng — nếu tiền đề đúng thì kết luận phải đúng',
+  notation:'P → C (valid iff không thể P đúng mà C sai)',
+  desc:'Một lập luận có tính hiệu lực (valid) khi cấu trúc logic của nó đảm bảo: nếu tất cả tiền đề đúng thì kết luận PHẢI đúng. Tính hiệu lực chỉ liên quan đến hình thức, không liên quan đến nội dung thực tế.',
+  points:['Valid ≠ đúng về nội dung: tiền đề có thể sai nhưng lập luận vẫn valid','Invalid: có thể tiền đề đúng mà kết luận vẫn sai','Kiểm tra validity: giả sử tiền đề đúng → kết luận có bắt buộc đúng không?','Mục tiêu: cả valid + sound (tiền đề đúng)'],
+  example:'Lập luận VALID (nhưng tiền đề sai):\n"Mọi con mèo đều biết bay. Tom là mèo. → Tom biết bay."\nCấu trúc đúng dù thực tế sai.\n\nLập luận INVALID:\n"Trời mưa thì đường ướt. Đường ướt. → Trời đang mưa."\n(có thể ai đó tưới nước → không nhất thiết trời mưa)',
+  formula:'Valid: ¬∃ (P1∧P2 = T) ∧ (C = F)',
+  related:['Tính vững chắc','Lập luận','Hình thức logic']},
+
+{id:4,cat:'c1',core:true,
+  title:'Tính vững chắc',en:'Soundness',
+  tagline:'Lập luận vừa hiệu lực vừa có tiền đề đúng — đỉnh cao của lập luận',
+  notation:'Sound = Valid + All premises True',
+  desc:'Tính vững chắc (soundness) là tiêu chuẩn cao nhất: lập luận phải đồng thời (1) có tính hiệu lực về cấu trúc VÀ (2) tất cả tiền đề đều thực sự đúng. Chỉ lập luận vững chắc mới đảm bảo kết luận đúng.',
+  points:['Valid nhưng không sound: cấu trúc đúng, tiền đề sai','Sound nhưng không valid: không thể tồn tại (sound đòi hỏi valid)','Mọi lập luận sound đều valid, không phải ngược lại','Đây là mục tiêu của mọi lập luận khoa học và học thuật'],
+  example:'Lập luận SOUND:\n"Mọi người có tim đều là động vật. Lan có tim. → Lan là động vật."\n→ Cả cấu trúc VÀ tiền đề đều đúng.\n\nLập luận VALID nhưng không SOUND:\n"Mọi robot có tim. Lan là robot. → Lan có tim."\n→ Cấu trúc đúng nhưng "Lan là robot" sai.',
+  formula:'Sound ⊆ Valid (sound là tập con của valid)',
+  related:['Tính hiệu lực','Tiền đề','Lập luận']},
+
+{id:5,cat:'c1',
+  title:'Bảng chân trị',en:'Truth Table',
+  tagline:'Công cụ liệt kê mọi tổ hợp giá trị chân lý có thể',
+  notation:'2ⁿ hàng cho n mệnh đề',
+  desc:'Bảng chân trị là công cụ liệt kê có hệ thống tất cả tổ hợp giá trị T/F của các mệnh đề và kết quả của biểu thức logic. Nó là phương pháp cơ học nhất để kiểm tra tính hiệu lực.',
+  points:['n mệnh đề → 2ⁿ tổ hợp có thể','Tautology: luôn đúng mọi tổ hợp','Contradiction: luôn sai mọi tổ hợp','Contingency: đúng ở một số tổ hợp, sai ở một số khác'],
+  example:'P | Q | P ∧ Q | P ∨ Q | P → Q\nT | T |   T   |   T   |   T\nT | F |   F   |   T   |   F ← đây là trường hợp "tiền đề đúng, kết luận sai"\nF | T |   F   |   T   |   T\nF | F |   F   |   F   |   T',
+  formula:'P → Q tương đương với ¬P ∨ Q',
+  related:['Mệnh đề','Liên từ logic','Tautology']},
+
+{id:6,cat:'c1',core:true,
+  title:'Luật bài trung',en:'Law of Excluded Middle',
+  tagline:'Mọi mệnh đề hoặc đúng hoặc sai — không có trạng thái thứ ba',
+  notation:'∀P: P ∨ ¬P = True',
+  desc:'Luật bài trung (LEM) khẳng định với bất kỳ mệnh đề P nào, hoặc P đúng hoặc phủ định của P đúng — không thể cả hai đều sai, không thể vừa đúng vừa sai, không có trạng thái "vừa vừa".',
+  points:['Một trong ba luật cơ bản của logic cổ điển (Aristotle)','Luật đồng nhất: P = P','Luật không mâu thuẫn: ¬(P ∧ ¬P)','Bị từ chối trong logic trực giác và một số hệ logic đa trị'],
+  example:'"Nam giới hoặc không phải nam giới" → luôn đúng\n"Số 7 là nguyên tố hoặc không phải nguyên tố" → luôn đúng\n\nChú ý: không áp dụng cho câu mơ hồ:\n"Người này hói đầu hay không?" — ranh giới mờ (sorites paradox)',
+  formula:'P ∨ ¬P ≡ ⊤ (tautology)',
+  related:['Mệnh đề','Luật không mâu thuẫn','Logic ba trị']},
+
+{id:7,cat:'c1',
+  title:'Liên từ logic',en:'Logical Connectives',
+  tagline:'Các phép toán kết hợp mệnh đề: AND, OR, NOT, IF-THEN',
+  notation:'∧ ∨ ¬ → ↔',
+  desc:'Liên từ logic (logical connectives) là các phép toán nối mệnh đề thành mệnh đề ghép. Mỗi liên từ có bảng chân trị xác định, tạo nên ngôn ngữ hình thức của logic mệnh đề.',
+  points:['¬P (NOT): phủ định — đảo ngược giá trị chân lý','P ∧ Q (AND): hội — đúng chỉ khi cả hai đúng','P ∨ Q (OR): tuyển — đúng khi ít nhất một đúng','P → Q (IF-THEN): điều kiện — chỉ sai khi P đúng Q sai','P ↔ Q (IFF): tương đương — cùng giá trị chân lý'],
+  example:'"Trời mưa VÀ đường ướt" (∧): cần cả hai đúng\n"Anh có thể ăn pizza HOẶC mì" (∨): đúng nếu có ít nhất một\n"NẾU học chăm, THÌ thi đỗ" (→): chỉ sai nếu học chăm mà vẫn trượt\n"Anh đỗ NẾU VÀ CHỈ NẾU học chăm" (↔): cả hai cùng đúng hoặc cùng sai',
+  formula:'→ là liên từ quan trọng nhất: P→Q ≡ ¬P∨Q',
+  related:['Bảng chân trị','Mệnh đề','Logic mệnh đề']},
+
+{id:8,cat:'c1',
+  title:'Phủ định',en:'Negation',
+  tagline:'Đảo ngược giá trị chân lý của một mệnh đề',
+  notation:'¬P, ~P, "không phải P"',
+  desc:'Phủ định là phép toán logic cơ bản nhất: nếu P đúng thì ¬P sai, và ngược lại. Việc phủ định đúng cách — đặc biệt với mệnh đề phức tạp — là kỹ năng quan trọng trong tư duy logic.',
+  points:['Phủ định đơn giản: "Trời mưa" → "Trời không mưa"','Phủ định "mọi": ¬(∀x P(x)) = ∃x ¬P(x)','Phủ định "tồn tại": ¬(∃x P(x)) = ∀x ¬P(x)','Phủ định kép: ¬¬P = P (trong logic cổ điển)'],
+  example:'Phủ định đúng của "Tất cả SV đều chăm học":\nNHẦM: "Không SV nào chăm học"\nĐÚNG: "Có ít nhất một SV không chăm học"\n\nPhủ định đúng của "Có người nói dối":\nĐÚNG: "Không có ai nói dối"',
+  formula:'¬(∀x P) = ∃x ¬P\n¬(∃x P) = ∀x ¬P',
+  related:['Liên từ logic','Mệnh đề','Luật De Morgan']},
+
+{id:9,cat:'c1',
+  title:'Hàm ý',en:'Implication (Conditional)',
+  tagline:'Nếu P thì Q — mối quan hệ điều kiện-kết quả trong logic',
+  notation:'P → Q, P ⊃ Q',
+  desc:'Hàm ý (conditional) P→Q là một trong các liên từ quan trọng và dễ nhầm nhất. Nó không nói P gây ra Q, không nói P và Q có liên quan — chỉ nói: không thể xảy ra P đúng mà Q sai.',
+  points:['Chỉ sai khi: tiền kiện (P) đúng và hậu kiện (Q) sai','Đúng khi: P sai (bất kể Q là gì) — "vacuous truth"','Contrapositive: P→Q ≡ ¬Q→¬P (tương đương)','Converse: Q→P KHÔNG tương đương với P→Q'],
+  example:'"NẾU thi đỗ, THÌ được học bổng" (P→Q)\n• Thi đỗ + có học bổng → Đúng (T→T)\n• Thi đỗ + không học bổng → SAI (T→F) ← vi phạm cam kết\n• Thi trượt + có học bổng → Đúng (F→T) ← vì câu ban đầu không nói gì về trường hợp này\n• Thi trượt + không học bổng → Đúng (F→F)',
+  formula:'P → Q ≡ ¬P ∨ Q\nContrapositive: P→Q ≡ ¬Q→¬P',
+  related:['Liên từ logic','Bảng chân trị','Modus Ponens']},
+
+{id:10,cat:'c1',
+  title:'Tương đương logic',en:'Logical Equivalence',
+  tagline:'Hai biểu thức luôn có cùng giá trị chân lý',
+  notation:'P ≡ Q, P ↔ Q (tautology)',
+  desc:'Hai biểu thức logic tương đương khi chúng có cùng giá trị chân trị trong mọi tổ hợp. Các quy tắc tương đương quan trọng như Luật De Morgan là công cụ biến đổi biểu thức logic.',
+  points:['Luật De Morgan: ¬(P∧Q) ≡ ¬P∨¬Q','Luật hấp thụ: P∧(P∨Q) ≡ P','Luật phân phối: P∧(Q∨R) ≡ (P∧Q)∨(P∧R)','Contrapositive: P→Q ≡ ¬Q→¬P'],
+  example:'Luật De Morgan trong ngôn ngữ tự nhiên:\n¬(P∧Q) = "Không phải (có mưa VÀ có nắng)"\n≡ ¬P∨¬Q = "Không mưa HOẶC không nắng"\n\nỨng dụng: "Không phải cả hai đều sai" ≡ "Ít nhất một đúng"',
+  formula:'De Morgan: ¬(P∧Q) ≡ ¬P∨¬Q\n          ¬(P∨Q) ≡ ¬P∧¬Q',
+  related:['Liên từ logic','Phủ định','Bảng chân trị']},
+
+{id:11,cat:'c2',core:true,
+  title:'Modus Ponens',en:'Modus Ponens (MP)',
+  tagline:'Khẳng định tiền kiện → khẳng định hậu kiện',
+  notation:'P→Q, P ⊢ Q',
+  desc:'Modus Ponens là quy tắc suy luận cơ bản nhất trong logic: nếu "Nếu P thì Q" đúng, và P đúng, thì Q phải đúng. Đây là nền tảng của mọi suy luận diễn dịch.',
+  points:['Hợp lệ tuyệt đối — không có ngoại lệ','Tiền đề 1: P → Q (hàm ý)','Tiền đề 2: P (tiền kiện đúng)','Kết luận: Q (hậu kiện phải đúng)'],
+  example:'P1: "NẾU mưa, THÌ đường ướt" (P→Q)\nP2: "Trời đang mưa" (P)\nKL: "Đường đang ướt" (Q) ✓\n\nVí dụ khác:\nP1: "NẾU nhiệt độ > 100°C, nước sôi"\nP2: "Nhiệt độ = 150°C"\nKL: "Nước đang sôi" ✓',
+  formula:'P → Q\nP\n-\n∴ Q',
+  related:['Modus Tollens','Tính hiệu lực','Lập luận']},
+
+{id:12,cat:'c2',core:true,
+  title:'Modus Tollens',en:'Modus Tollens (MT)',
+  tagline:'Phủ định hậu kiện → phủ định tiền kiện',
+  notation:'P→Q, ¬Q ⊢ ¬P',
+  desc:'Modus Tollens là quy tắc suy luận đồng hành với Modus Ponens: nếu "Nếu P thì Q" đúng, và Q sai, thì P phải sai. Dựa trên tính tương đương với contrapositive.',
+  points:['Hợp lệ tuyệt đối — dựa trên contrapositive','Tiền đề 1: P → Q','Tiền đề 2: ¬Q (hậu kiện sai)','Kết luận: ¬P (tiền kiện phải sai)'],
+  example:'P1: "NẾU học tốt, THÌ thi đỗ"\nP2: "Anh ấy đã trượt" (¬Q)\nKL: "Anh ấy không học tốt" (¬P) ✓\n\nKhoa học dùng MT để bác bỏ lý thuyết:\nP1: "NẾU thuyết A đúng, THÌ thí nghiệm X cho kết quả Y"\nP2: "Thí nghiệm X KHÔNG cho kết quả Y"\nKL: "Thuyết A sai" ✓ — phương pháp Popper',
+  formula:'P → Q\n¬Q\n-\n∴ ¬P',
+  related:['Modus Ponens','Contrapositive','Phản bác khoa học']},
+
+{id:13,cat:'c2',
+  title:'Tam đoạn luận',en:'Syllogism',
+  tagline:'Suy luận ba bước: đại tiền đề → tiểu tiền đề → kết luận',
+  notation:'Maj, Min ⊢ C (Barbara form: AAA)',
+  desc:'Tam đoạn luận (syllogism, Aristotle) là dạng lập luận diễn dịch cổ điển gồm: đại tiền đề (major premise, khái quát), tiểu tiền đề (minor premise, cụ thể), và kết luận. Có 256 dạng tam đoạn luận, chỉ 24 hợp lệ.',
+  points:['Đại tiền đề: mệnh đề phổ quát về một loại','Tiểu tiền đề: mệnh đề cụ thể về một cá thể/loại nhỏ','Kết luận: được suy ra từ hai tiền đề','4 dạng mệnh đề: A (universal affirmative), E, I, O'],
+  example:'Dạng Barbara (AAA — hợp lệ):\nĐại TP: "Tất cả người có lý trí đều có thể học logic" (A)\nTiểu TP: "Bạn là người có lý trí" (A)\nKết luận: "Bạn có thể học logic" (A) ✓\n\nDạng không hợp lệ:\n"Mọi cá đều bơi. Con chó bơi. → Con chó là cá." ✗',
+  formula:'MaP, SaM ⊢ SaP\na = "mọi... đều..." (universal affirmative)',
+  related:['Modus Ponens','Lượng từ','Tính hiệu lực']},
+
+{id:14,cat:'c2',
+  title:'Suy luận diễn dịch',en:'Deductive Reasoning',
+  tagline:'Đi từ nguyên lý chung đến trường hợp cụ thể — đảm bảo chắc chắn',
+  notation:'Premises (general) ⊢ Conclusion (specific)',
+  desc:'Suy luận diễn dịch đi từ điều chung đến điều riêng — nếu tiền đề đúng và cấu trúc hợp lệ, kết luận CHẮC CHẮN đúng (không chỉ có thể đúng). Đây là đặc điểm phân biệt với suy luận quy nạp.',
+  points:['Bảo toàn chân lý: sự thật "chảy xuống" từ tiền đề','Không tạo tri thức mới — chỉ hiển thị tri thức ẩn trong tiền đề','Toán học và logic hình thức dùng diễn dịch','Nhược điểm: kết quả bị giới hạn bởi tiền đề'],
+  example:'Toán học hoàn toàn là diễn dịch:\n• Tiên đề → Định lý (Euclid, 300 TCN)\n• "1+1=2" được chứng minh bằng tiên đề Peano\n\nPháp lý dùng diễn dịch:\n• Luật pháp (đại TP) + Sự kiện (tiểu TP) → Phán quyết',
+  formula:'Deduction: Truth-preserving\nInduction: Evidence-amplifying',
+  related:['Suy luận quy nạp','Tính hiệu lực','Tính vững chắc']},
+
+{id:15,cat:'c2',
+  title:'Phản chứng',en:'Proof by Contradiction (Reductio ad Absurdum)',
+  tagline:'Giả sử ngược lại, dẫn đến mâu thuẫn → mệnh đề gốc đúng',
+  notation:'¬P → ⊥, ∴ P',
+  desc:'Phản chứng (RAA) là kỹ thuật chứng minh mạnh mẽ: để chứng minh P đúng, ta giả sử ¬P (P sai), sau đó suy luận đến mâu thuẫn (⊥). Mâu thuẫn chứng tỏ giả thiết ¬P sai, do đó P phải đúng.',
+  points:['Bước 1: Giả thiết ¬P (ngược lại điều muốn chứng minh)','Bước 2: Suy luận hợp lệ từ ¬P','Bước 3: Đi đến mâu thuẫn (B ∧ ¬B)','Bước 4: Kết luận P phải đúng'],
+  example:'Chứng minh √2 là vô tỉ (Euclid):\n1. Giả sử √2 = p/q (p,q nguyên, tối giản)\n2. → 2 = p2/q2 → p2 = 2q2 → p2 chẵn → p chẵn\n3. Đặt p=2k → 4k2=2q2 → q2=2k2 → q chẵn\n4. Cả p và q đều chẵn — mâu thuẫn với "tối giản" ✗\n5. Kết luận: √2 là vô tỉ ✓',
+  formula:'[¬P ⊢ ⊥] ⊢ P',
+  related:['Luật không mâu thuẫn','Tính hiệu lực','Logic toán học']},
+
+{id:16,cat:'c2',
+  title:'Luật De Morgan',en:"De Morgan's Laws",
+  tagline:'Phủ định phép hội và tuyển — đổi ∧ thành ∨ và ngược lại',
+  notation:'¬(P∧Q) ≡ ¬P∨¬Q',
+  desc:'Luật De Morgan là một trong những quy tắc tương đương logic thực dụng nhất: khi phủ định toàn bộ một biểu thức có ∧ hoặc ∨, ta phủ định từng mệnh đề con và đổi ∧ thành ∨ (và ngược lại).',
+  points:['Luật 1: ¬(P ∧ Q) ≡ ¬P ∨ ¬Q','Luật 2: ¬(P ∨ Q) ≡ ¬P ∧ ¬Q','Ứng dụng rộng rãi trong lập trình (điều kiện if/else)','Giúp đơn giản hóa biểu thức logic phức tạp'],
+  example:'"Không phải (anh ta VÀ tôi đều đến)"\n≡ "Anh ta không đến HOẶC tôi không đến"\n\nLập trình:\nif !(A && B) { ... }\n≡ if (!A || !B) { ... }\n\n"Không phải (có gió HOẶC có mưa)"\n≡ "Không gió VÀ không mưa"',
+  formula:'¬(P∧Q) ≡ ¬P∨¬Q\n¬(P∨Q) ≡ ¬P∧¬Q',
+  related:['Liên từ logic','Tương đương logic','Phủ định']},
+
+{id:17,cat:'c2',
+  title:'Lượng từ',en:'Quantifiers',
+  tagline:'∀ "mọi" và ∃ "tồn tại" — nền tảng logic vị từ',
+  notation:'∀x P(x), ∃x P(x)',
+  desc:'Lượng từ mở rộng logic mệnh đề sang logic vị từ (predicate logic), cho phép phát biểu về tập hợp đối tượng. "∀" (forall) nói về mọi phần tử, "∃" (exists) nói về ít nhất một phần tử.',
+  points:['∀x P(x): "Với mọi x, P(x) đúng" — cần sai một trường hợp để bác bỏ','∃x P(x): "Tồn tại ít nhất một x mà P(x) đúng" — cần một ví dụ để chứng minh','Phủ định: ¬(∀x P) = ∃x ¬P và ¬(∃x P) = ∀x ¬P','Thứ tự lượng từ rất quan trọng: ∀x∃y ≠ ∃y∀x'],
+  example:'"Mọi số chẵn đều chia hết cho 2" (∀x: chẵn(x) → chia hết 2(x))\n→ Cần phản ví dụ để bác bỏ\n\n"Tồn tại số nguyên tố lớn hơn 100" (∃x: nguyên tố(x) ∧ x>100)\n→ Chỉ cần một ví dụ: 101\n\n∀x∃y (y > x): "Với mọi số, tồn tại số lớn hơn" ✓\n∃y∀x (y > x): "Tồn tại số lớn hơn mọi số" ✗',
+  formula:'¬(∀x Px) = ∃x ¬Px\n¬(∃x Px) = ∀x ¬Px',
+  related:['Logic vị từ','Phủ định','Tam đoạn luận']},
+
+{id:18,cat:'c2',
+  title:'Chứng minh trực tiếp',en:'Direct Proof',
+  tagline:'Chuỗi suy luận thẳng từ tiền đề đến kết luận',
+  notation:'P1, P2, ..., Pn ∴ C',
+  desc:'Chứng minh trực tiếp là phương pháp cơ bản nhất: bắt đầu từ các tiền đề đã biết đúng, áp dụng các quy tắc suy luận hợp lệ theo chuỗi, cho đến khi đạt đến kết luận cần chứng minh.',
+  points:['Mỗi bước chỉ dùng quy tắc suy luận đã được chấp nhận','Đơn giản và minh bạch — không cần giả thiết phụ','Phù hợp khi P → Q có hướng tự nhiên','Ngược lại là chứng minh gián tiếp (phản chứng)'],
+  example:'Chứng minh: "n lẻ → n2 lẻ"\n1. Giả sử n lẻ → n = 2k+1 (k nguyên)\n2. n2 = (2k+1)2 = 4k2 + 4k + 1 = 2(2k2+2k) + 1\n3. Dạng 2m+1 → n2 lẻ ✓ (chứng minh trực tiếp)',
+  formula:'n = 2k+1 → n2 = 2(2k2+2k)+1 (odd)',
+  related:['Phản chứng','Tính vững chắc','Suy luận diễn dịch']},
+
+{id:19,cat:'c2',
+  title:'Quy nạp toán học',en:'Mathematical Induction',
+  tagline:'Chứng minh cho trường hợp n=1, rồi từ n suy ra n+1',
+  notation:'P(1) ∧ [P(n)→P(n+1)] → ∀n P(n)',
+  desc:'Quy nạp toán học (khác với quy nạp khoa học) là phương pháp diễn dịch chứng minh mệnh đề cho mọi số tự nhiên: chứng minh trường hợp cơ sở (base case) và bước quy nạp (inductive step).',
+  points:['Base case: chứng minh P(1) (hoặc P(0)) đúng','Inductive step: giả sử P(n) đúng (inductive hypothesis), chứng minh P(n+1) đúng','Kết luận: P(n) đúng cho mọi n ∈ ℕ','Ẩn dụ domino: xô viên đầu, mỗi viên xô viên kế tiếp'],
+  example:'Chứng minh: 1+2+3+...+n = n(n+1)/2\n\nBase: n=1: 1 = 1×2/2 = 1 ✓\n\nInductive step: Giả sử đúng với n=k\n1+...+k = k(k+1)/2\n→ 1+...+k+(k+1) = k(k+1)/2 + (k+1)\n= (k+1)(k/2 + 1) = (k+1)(k+2)/2 ✓',
+  formula:'P(1) ∧ ∀n[P(n)→P(n+1)] ⊢ ∀n P(n)',
+  related:['Logic toán học','Suy luận diễn dịch','Chứng minh trực tiếp']},
+
+{id:20,cat:'c2',
+  title:'Biconditional',en:'Biconditional (If and Only If)',
+  tagline:'"Nếu và chỉ nếu" — hai điều kiện cùng đúng hay cùng sai',
+  notation:'P ↔ Q, P ≡ Q, "iff"',
+  desc:'Biconditional P↔Q đúng khi P và Q có cùng giá trị chân lý. Nó là giao của cả hai hàm ý: P→Q và Q→P đồng thời đúng. Định nghĩa toán học thường dùng dạng này.',
+  points:['P↔Q ≡ (P→Q) ∧ (Q→P)','Đúng khi cả hai đúng hoặc cả hai sai','Sai khi một đúng một sai','Toán học: định nghĩa luôn là "if and only if"'],
+  example:'"Tam giác đều khi và chỉ khi ba cạnh bằng nhau"\n→ P: tam giác đều ↔ Q: ba cạnh bằng\nNếu đều → ba cạnh bằng ✓\nNếu ba cạnh bằng → đều ✓\n\nSo sánh với P→Q:\n"NẾU mưa THÌ đường ướt" (không phải iff)\n→ Đường ướt không nhất thiết do mưa',
+  formula:'P↔Q ≡ (P→Q)∧(Q→P)',
+  related:['Hàm ý','Liên từ logic','Tương đương logic']},
+
+{id:21,cat:'c3',core:true,
+  title:'Suy luận quy nạp',en:'Inductive Reasoning',
+  tagline:'Từ quan sát cụ thể suy ra nguyên lý chung — không chắc chắn nhưng mạnh mẽ',
+  notation:'O1, O2, ..., On ⇒ H (probable)',
+  desc:'Suy luận quy nạp đi từ các quan sát cụ thể đến giả thuyết tổng quát. Khác với diễn dịch, quy nạp không đảm bảo chắc chắn — kết luận chỉ được ủng hộ ở mức độ nào đó. Đây là nền tảng của phương pháp khoa học.',
+  points:['Luôn có khả năng sai dù tiền đề đúng (non-monotonic)','Độ mạnh phụ thuộc vào số lượng và đa dạng của quan sát','Không bao giờ "chứng minh" — chỉ "hỗ trợ mạnh mẽ"','Hume: vấn đề quy nạp — không có cơ sở logic tuyệt đối'],
+  example:'"Mọi thiên nga tôi từng thấy đều trắng" (n=1000)\n→ "Mọi thiên nga đều trắng" (quy nạp)\n→ Năm 1697, phát hiện thiên nga đen ở Úc! ✗\n\nĐây là "vấn đề thiên nga đen" của Nassim Taleb:\n→ Không thể xác nhận bằng ví dụ, chỉ bác bỏ bằng phản ví dụ',
+  formula:'n quan sát đồng nhất ⇒ P(tổng quát) với xác suất cao',
+  related:['Suy luận diễn dịch','Tổng quát hóa','Falsifiability']},
+
+{id:22,cat:'c3',core:true,
+  title:'Suy luận quy nạp tốt nhất',en:'Inference to the Best Explanation (Abduction)',
+  tagline:'Chọn giả thuyết giải thích bằng chứng tốt nhất — lý luận thám tử',
+  notation:'E, H giải thích E tốt nhất ⇒ H (probable)',
+  desc:'Suy luận suy diễn tốt nhất (abductive reasoning, Peirce) hay "Inference to the Best Explanation" là chọn giả thuyết giải thích đơn giản và toàn diện nhất cho tập hợp bằng chứng. Đây là cách Sherlock Holmes và bác sĩ House suy luận.',
+  points:['Liệt kê tất cả giả thuyết có thể giải thích bằng chứng','Đánh giá theo: đơn giản, đầy đủ, nhất quán, có thể kiểm tra được','Chọn giả thuyết tốt nhất — không phải chắc chắn đúng','Liên quan chặt đến "lý dao cạo Occam"'],
+  example:'Sáng ra thấy cỏ ướt.\nGiả thuyết 1: Đêm qua trời mưa\nGiả thuyết 2: Ai đó tưới cỏ lúc 3 giờ sáng\nGiả thuyết 3: Sương đêm\nGiả thuyết 4: Đường nước vỡ\n→ Chọn: Mưa (đơn giản nhất, phổ biến nhất) ✓\n\nSherlock Holmes: "Loại trừ mọi thứ không thể → còn lại là sự thật"',
+  formula:'Best H: Simple + Comprehensive + Consistent + Testable',
+  related:['Dao cạo Occam','Suy luận quy nạp','Khoa học']},
+
+{id:23,cat:'c3',
+  title:'Tổng quát hóa vội vàng',en:'Hasty Generalization',
+  tagline:'Rút ra kết luận phổ quát từ quá ít quan sát',
+  notation:'O1, O2 → "Mọi..." (insufficient n)',
+  desc:'Tổng quát hóa vội vàng là ngụy biện/lỗi quy nạp phổ biến nhất: rút ra kết luận tổng quát từ mẫu quá nhỏ, không đại diện. Kết luận có thể sai dù từng quan sát đúng.',
+  points:['Nguyên nhân: mẫu quá nhỏ, thiếu đa dạng, hoặc thiên kiến trong chọn mẫu','Bẫy: con người có xu hướng nhớ và trọng số quá cao cho ví dụ sống động','Khắc phục: tăng kích thước mẫu, đảm bảo tính đại diện','Liên quan đến availability bias và confirmation bias'],
+  example:'Gặp 2 người miền X không thân thiện\n→ "Người miền X không thân thiện" ✗\n\nSurvivorship bias:\nNghiên cứu 50 doanh nhân thành công → tìm ra đặc điểm chung\n→ "Đây là bí quyết thành công" ✗\n(Quên mất hàng nghìn người có đặc điểm giống nhưng thất bại)',
+  formula:'n << population → kết luận tổng quát không đáng tin',
+  related:['Suy luận quy nạp','Sampling bias','Confirmation bias']},
+
+{id:24,cat:'c3',
+  title:'Phép loại suy',en:'Analogical Reasoning',
+  tagline:'Từ sự tương đồng giữa A và B, suy ra B có thuộc tính của A',
+  notation:'A ~ B (similarity), A has P ⇒ B likely has P',
+  desc:'Lý luận tương tự (analogy) suy ra rằng nếu hai điều giống nhau ở nhiều điểm quan trọng, chúng có thể giống nhau ở điểm đang xét. Mạnh khi nhiều điểm tương đồng liên quan, yếu khi tương đồng nông.',
+  points:['Mạnh khi: nhiều điểm tương đồng, liên quan đến thuộc tính đang xét','Yếu khi: khác biệt quan trọng bị bỏ qua, tương đồng bề mặt','Dùng rộng rãi trong pháp lý (case law), khoa học (mô hình)','Ngụy biện "false analogy" khi khác biệt lớn hơn tương đồng'],
+  example:'TỐT: "Trái tim giống bơm nước — cả hai đẩy chất lỏng qua ống"\n→ Có thể dùng nguyên lý bơm để nghiên cứu tim\n\nYẾU: "Não giống máy tính — cả hai xử lý thông tin"\n→ Nhiều khác biệt quan trọng bị bỏ qua\n\nTỐT TRONG LUẬT: án lệ tương tự áp dụng cho vụ mới',
+  formula:'Strength = # Relevant Similarities / # Relevant Differences',
+  related:['Suy luận quy nạp','False Analogy','Mô hình khoa học']},
+
+{id:25,cat:'c3',
+  title:'Nghịch lý quy nạp',en:"Hume's Problem of Induction",
+  tagline:'Không có cơ sở logic nào chứng minh tương lai giống quá khứ',
+  notation:'∀n obs(P) ⇏ P (logic rigor)',
+  desc:'David Hume phát hiện vấn đề căn bản: mọi quy nạp dựa trên giả định rằng tự nhiên đồng nhất — tương lai sẽ giống quá khứ. Nhưng giả định này không thể chứng minh bằng logic hay kinh nghiệm mà không tạo vòng tròn.',
+  points:['Mọi lập luận quy nạp ngầm giả định "tính đồng nhất của tự nhiên"','Tính đồng nhất này không thể chứng minh bằng quy nạp (circular) hay diễn dịch','Hume: thói quen và kỳ vọng tâm lý, không phải logic','Karl Popper phản hồi: không cần xác nhận, chỉ cần khả năng bác bỏ'],
+  example:'Quan sát 10.000 lần mặt trời mọc → "Ngày mai mặt trời cũng mọc"\nNhưng: tại sao ngày mai phải giống hôm nay?\nChứng minh bằng quy nạp ("quá khứ đã vậy")? → Vòng tròn!\n\nKhủng hoảng thị trường: "Thị trường luôn phục hồi"\n→ Dựa trên quy nạp từ quá khứ — có thể sai!',
+  formula:'Hume: no valid deductive argument for P(future)=P(past)',
+  related:['Suy luận quy nạp','Falsifiability','Nhận thức luận']},
+
+{id:26,cat:'c3',
+  title:'Mức độ hỗ trợ quy nạp',en:'Inductive Strength',
+  tagline:'Quy nạp mạnh: bằng chứng nhiều và đa dạng làm kết luận rất có khả năng',
+  notation:'Strong: E ⇒ H (very probable)',
+  desc:'Không phải mọi suy luận quy nạp đều mạnh như nhau. Tính mạnh (strength) phụ thuộc vào số lượng và chất lượng của bằng chứng, tính đại diện của mẫu, và sự vắng mặt của phản ví dụ.',
+  points:['Mẫu lớn hơn → mạnh hơn (ceteris paribus)','Mẫu đa dạng hơn → mạnh hơn','Thiếu phản ví dụ sau tìm kiếm kỹ → mạnh hơn','Khác biệt với deductive: không bao giờ 100% chắc chắn'],
+  example:'YẾU: "3 con quạ đen → mọi quạ đều đen"\nMẠNH: "Hàng triệu quạ được quan sát ở mọi nơi đều đen, sau nhiều thế kỷ nghiên cứu, không có phản ví dụ → rất có thể mọi quạ đều đen"\n\nY học: clinical trial với n=30 (yếu) vs n=10,000 (mạnh)',
+  formula:'Strength ∝ n(sample) × diversity × absence of counterexamples',
+  related:['Suy luận quy nạp','Tổng quát hóa vội vàng','Statistical significance']},
+
+{id:27,cat:'c3',
+  title:'Tư duy xác suất',en:'Probabilistic Thinking',
+  tagline:'Thay thế chắc chắn/không bằng dải xác suất và cập nhật liên tục',
+  notation:'P(H|E) ∝ P(E|H)·P(H)',
+  desc:'Tư duy xác suất (Bayesian) không dùng nhị phân đúng/sai mà gán xác suất cho niềm tin và cập nhật liên tục khi có bằng chứng mới theo định lý Bayes. Đây là nền tảng của suy luận khoa học hiện đại.',
+  points:['Prior P(H): xác suất ban đầu cho giả thuyết','Likelihood P(E|H): khả năng thấy bằng chứng E nếu H đúng','Posterior P(H|E): xác suất H đúng sau khi thấy E','Cập nhật niềm tin liên tục khi có thêm thông tin'],
+  example:'Test HIV dương tính:\n• Độ nhạy: 99%, Độ đặc hiệu: 99%\n• Nhưng tỷ lệ mắc: 0.1% dân số\n\nTính P(HIV | dương tính):\nBayes: P = (0.99×0.001) / [(0.99×0.001)+(0.01×0.999)] ≈ 9%\n→ Dù test dương tính, chỉ 9% thực sự mắc! (base rate!)',
+  formula:"P(H|E) = P(E|H)×P(H) / P(E)\n(Bayes' theorem)",
+  related:['Suy luận quy nạp','Base rate','Nghịch lý quy nạp']},
+
+{id:28,cat:'c3',
+  title:'Nhân quả vs Tương quan',en:'Causation vs Correlation',
+  tagline:'Hai điều cùng thay đổi không có nghĩa là cái này gây ra cái kia',
+  notation:'A ~ B ≠ A → B',
+  desc:'Một trong những lỗi phổ biến nhất: nhầm tương quan (hai biến cùng thay đổi) với nhân quả (cái này gây ra cái kia). Tương quan có thể do trùng hợp ngẫu nhiên, biến nhiễu, hay nhân quả ngược.',
+  points:['Biến nhiễu (confounding): C gây ra cả A và B → A và B tương quan','Nhân quả ngược: B gây ra A, không phải A gây B','Tương quan giả (spurious): hoàn toàn ngẫu nhiên','Kiểm chứng nhân quả: thí nghiệm ngẫu nhiên có kiểm soát (RCT)'],
+  example:'Tương quan cao: doanh số kem và chết đuối cùng tăng vào mùa hè\n→ Kem không gây chết đuối! Biến nhiễu: mùa hè nóng\n\n"Quốc gia nhiều TV hơn → tuổi thọ cao hơn"\n→ Không phải TV → tuổi thọ. Biến nhiễu: mức giàu có\n\nPhân biệt: post hoc ergo propter hoc (sau đó nên do đó)',
+  formula:'A ↔ B (correlation) ≠ A → B (causation)',
+  related:['Suy luận quy nạp','Post hoc fallacy','Thí nghiệm khoa học']},
+
+{id:29,cat:'c3',
+  title:'Falsifiability',en:'Falsifiability (Popper)',
+  tagline:'Lý thuyết khoa học phải có khả năng bị chứng minh sai',
+  notation:'∃E: if H then ¬E (H is falsifiable)',
+  desc:'Karl Popper đề xuất tiêu chí phân ranh giới giữa khoa học và phi khoa học: một lý thuyết chỉ là khoa học nếu nó có thể bị bác bỏ bằng thực nghiệm. Lý thuyết không thể sai luôn là phi khoa học (hay tầm thường).',
+  points:['Khoa học: dự đoán cụ thể có thể kiểm tra → có thể sai','Phi khoa học: không dự đoán gì có thể kiểm tra (astrology, psychoanalysis khi mọi kết quả đều "xác nhận")','Khoa học tiến lên bằng bác bỏ, không phải xác nhận vô hạn','Asymmetry: 1 phản ví dụ bác bỏ, 1 triệu ví dụ không chứng minh'],
+  example:'Khoa học (có thể sai): "Nước sôi ở 100°C ở áp suất 1 atm"\n→ Có thể kiểm tra, có thể sai\n\nPhi khoa học: "Mọi chuyện đều xảy ra vì lý do"\n→ Không có thực nghiệm nào có thể bác bỏ\n\nEinstein: "NẾU thuyết tương đối đúng, ánh sáng cong qua trường hấp dẫn"\n→ Kiểm tra 1919: đúng ✓ (nhưng nếu sai → bác bỏ lý thuyết)',
+  formula:'H is scientific ↔ ∃ possible observation E s.t. E→¬H',
+  related:['Suy luận khoa học','Modus Tollens','Nhận thức luận']},
+
+{id:30,cat:'c3',
+  title:'Lý luận theo xác suất hậu nghiệm',en:'Bayesian Reasoning',
+  tagline:'Cập nhật niềm tin của bạn theo tỷ lệ với bằng chứng mới',
+  notation:'P(H|E) ∝ P(E|H) · P(H)',
+  desc:'Lý luận Bayes là framework cập nhật xác suất khi có bằng chứng mới. Nó trả lời câu hỏi: "Bằng chứng này nên thay đổi mức độ tin tưởng của tôi vào giả thuyết này bao nhiêu?"',
+  points:['Prior: niềm tin trước khi có bằng chứng mới','Likelihood ratio: bằng chứng này ủng hộ H bao nhiêu lần hơn ¬H?','Posterior: niềm tin sau khi cập nhật','Calibrated uncertainty: không quá chắc, không quá ngờ vực'],
+  example:'Sherlock Holmes:\nPrior: "Người này có thể là bất cứ ai"\nBằng chứng 1: chai lọ thuốc trong túi → tăng P(bác sĩ)\nBằng chứng 2: tan chảy giày đặc trưng → P(từ vùng nhất định)\nPosterior: "Ông là bác sĩ quân y từ Afghanistan"\n\nCập nhật từng bước, không nhảy đến kết luận sớm',
+  formula:"P(H|E1,E2,...) = P(En|H)·P(H|E1,...,En₋1) / P(En)",
+  related:['Tư duy xác suất','Falsifiability','Suy luận quy nạp']},
+
+{id:31,cat:'c4',core:true,
+  title:'Khẳng định hậu kiện',en:'Affirming the Consequent',
+  tagline:'P→Q, Q đúng → kết luận sai rằng P đúng',
+  notation:'P→Q, Q ⊬ P (INVALID)',
+  desc:'Đây là ngụy biện hình thức phổ biến nhất: từ "Nếu P thì Q" và "Q đúng", sai lầm kết luận "P đúng". Đây là lỗi hình thức nghiêm trọng vì cấu trúc hoàn toàn sai, không thể sửa bằng nội dung.',
+  points:['So sánh với Modus Ponens đúng: P→Q, P ⊢ Q','Tại sao sai: Q có thể do nhiều nguyên nhân khác, không chỉ P','Dễ nhầm vì nghe có vẻ hợp lý','Ví dụ: "Tôi nghĩ vậy, vậy tôi tồn tại" không phải Descartes đúng theo cách này'],
+  example:'SAIA (Invalid):\nP1: "NẾU là chó, THÌ là động vật" (P→Q)\nP2: "Con này là động vật" (Q)\nKL: "Vậy nó là chó" (P) ✗ — có thể là mèo!\n\nTrong khoa học (nguy hiểm):\nP1: "NẾU H đúng, kết quả thí nghiệm Y"\nP2: "Thí nghiệm cho kết quả Y"\nKL: "H đúng" ✗ — chỉ xác nhận, không chứng minh',
+  warning:'Đây là lỗi cấu trúc — không thể sửa bằng cách đổi nội dung. Phải thay đổi hình thức lập luận.',
+  formula:'P→Q, Q ⊬ P (compare: P→Q, P ⊢ Q ✓)',
+  related:['Modus Ponens','Phủ định tiền kiện','Tính hiệu lực']},
+
+{id:32,cat:'c4',
+  title:'Phủ định tiền kiện',en:'Denying the Antecedent',
+  tagline:'P→Q, ¬P đúng → kết luận sai rằng ¬Q',
+  notation:'P→Q, ¬P ⊬ ¬Q (INVALID)',
+  desc:'Ngụy biện từ "Nếu P thì Q" và "P không xảy ra", sai lầm kết luận "Q không xảy ra". Sai vì Q có thể đúng vì lý do khác không phải P.',
+  points:['So sánh với Modus Tollens đúng: P→Q, ¬Q ⊢ ¬P','Tại sao sai: có thể có nguyên nhân khác dẫn đến Q','Ví dụ kinh điển trong chính sách công','Thường xuất hiện trong lập luận có-nếu-không'],
+  example:'INVALID:\nP1: "NẾU học chăm, THÌ sẽ thành công"\nP2: "Anh ấy không học chăm" (¬P)\nKL: "Anh ấy sẽ không thành công" (¬Q) ✗\n→ Có thể thành công nhờ may mắn, tài năng bẩm sinh...\n\nChính sách:\n"NẾU không trợ cấp, KHÔNG tạo việc làm"\n"Trợ cấp" → "Không trợ cấp tức là không có việc làm" ✗',
+  warning:'Cũng là lỗi cấu trúc — không thể sửa bằng nội dung.',
+  formula:'P→Q, ¬P ⊬ ¬Q (compare: P→Q, ¬Q ⊢ ¬P ✓)',
+  related:['Modus Tollens','Khẳng định hậu kiện','Ngụy biện hình thức']},
+
+{id:33,cat:'c4',
+  title:'Undistributed Middle',en:'Fallacy of the Undistributed Middle',
+  tagline:'Nhầm rằng hai thứ cùng thuộc loại C thì là một',
+  notation:'AaB, CaB ⊬ AaC',
+  desc:'Trong tam đoạn luận, lỗi "undistributed middle" xảy ra khi thuật ngữ giữa (middle term) không được phân phối (distributed) ở ít nhất một tiền đề — tức là không đề cập đến toàn bộ tập hợp.',
+  points:['Middle term phải distributed ở ít nhất một tiền đề','Distributed = đề cập đến toàn bộ tập hợp (universal statements)','Lỗi phổ biến trong lập luận loại suy không chặt','Bề ngoài trông như tam đoạn luận hợp lệ'],
+  example:'INVALID:\n"Mọi hành động can đảm đều đáng ngưỡng mộ"\n"Một số hành động điên rồ đáng ngưỡng mộ"\n→ "Mọi hành động điên rồ đều can đảm" ✗\n\nVí dụ rõ hơn:\n"Mọi chó đều là động vật có vú"\n"Mọi mèo đều là động vật có vú"\n→ "Mọi mèo đều là chó" ✗ — sai hiển nhiên!',
+  formula:'AaB, CaB ⊬ AaC (middle term B not distributed)',
+  related:['Tam đoạn luận','Lượng từ','Tính hiệu lực']},
+
+{id:34,cat:'c4',
+  title:'Hình tứ từ',en:'Quaternio Terminorum (Four Terms Fallacy)',
+  tagline:'Tam đoạn luận dùng bốn thuật ngữ thay vì ba — mất kết nối logic',
+  notation:'A, B, C, D — one term used equivocally',
+  desc:'Tam đoạn luận chỉ hợp lệ khi có đúng ba thuật ngữ. "Hình tứ từ" xảy ra khi một từ được dùng với hai nghĩa khác nhau (equivocation) làm xuất hiện thuật ngữ thứ tư ẩn, phá vỡ kết nối logic.',
+  points:['Thường do equivocation: dùng từ đa nghĩa','Khó phát hiện vì từ trông giống nhau về hình thức','Cần xác định rõ nghĩa của mỗi thuật ngữ','Liên quan chặt đến ngụy biện equivocation'],
+  example:'"Lông là nhẹ"\n"Những gì nhẹ thì không thể là tối" (dark)\n→ "Lông không thể là tối màu" ✗\n\n"Nhẹ" dùng hai nghĩa: light (không nặng) và light (sáng) → 4 thuật ngữ\n\nVí dụ khác:\n"Không gì (nothing) tốt hơn hạnh phúc"\n"Bánh mì tốt hơn không gì"\n→ "Bánh mì tốt hơn hạnh phúc" ✗',
+  formula:'Equivocation: term T used as T1 and T2 (T1 ≠ T2)',
+  related:['Ngụy biện Equivocation','Tam đoạn luận','Ngụy biện phi hình thức']},
+
+{id:35,cat:'c4',
+  title:'Ngụy biện song đề',en:'False Dilemma Fallacy',
+  tagline:'Giả vờ chỉ có hai lựa chọn khi thực ra có nhiều hơn',
+  notation:'P ∨ Q presented as exhaustive when ¬P ∧ ¬Q possible',
+  desc:'Ngụy biện song đề (false dichotomy) trình bày vấn đề như thể chỉ có hai lựa chọn đối lập, trong khi thực tế có thể có lựa chọn trung gian, kết hợp, hoặc hoàn toàn khác. Được dùng nhiều trong chính trị.',
+  points:['Dạng: "Hoặc A hoặc B" khi thực ra có C, D, E,...','Black-and-white thinking: không nhận ra vùng xám','Áp lực giả tạo: buộc chọn khi có thể từ chối cả hai','Phát hiện: hỏi "Có lựa chọn nào khác không?"'],
+  example:'"Hoặc bạn ủng hộ chúng tôi, hoặc bạn chống lại chúng tôi"\n→ Có thể trung lập, không quan tâm, hoặc một phần đồng ý\n\n"NẾU không học y thì phải học luật"\n→ Còn kỹ thuật, kinh doanh, nghệ thuật...\n\nQuảng cáo: "Hoặc dùng sản phẩm này, hoặc tiếp tục đau khổ"',
+  warning:'Để lại chỗ cho false dichotomy là bị thao túng.',
+  formula:'¬(P ∨ Q) when ∃R: ¬P ∧ ¬Q ∧ R is possible',
+  related:['Ngụy biện phi hình thức','Slippery slope','Straw man']},
+
+{id:36,cat:'c4',
+  title:'Tự mâu thuẫn',en:'Self-contradiction',
+  tagline:'Tiền đề của lập luận mâu thuẫn với nhau hoặc với kết luận',
+  notation:'P ∧ ¬P — always False',
+  desc:'Mọi lập luận chứa mâu thuẫn đều không thể vững chắc. Nếu hai tiền đề mâu thuẫn nhau, lập luận là trivially invalid. Từ mâu thuẫn (contradiction) có thể suy ra bất cứ điều gì — "ex contradictione quodlibet".',
+  points:['P ∧ ¬P = False — không bao giờ đúng','Từ contradiction, mọi kết luận đều "hợp lệ" (về mặt hình thức)','"Ex falso quodlibet": từ sai suy ra được gì cũng được','Phát hiện mâu thuẫn ẩn trong một hệ thống là mục tiêu quan trọng'],
+  example:'"Quy tắc duy nhất là không có quy tắc nào"\n→ Tự mâu thuẫn: câu này là một quy tắc!\n\n"Tôi không bao giờ nói không bao giờ"\n→ Mâu thuẫn trong câu\n\nRussell Paradox: "Tập hợp mọi tập hợp không chứa chính nó\n→ có chứa chính nó không?" → mâu thuẫn cơ bản',
+  formula:'⊥ ⊢ P (ex contradictione quodlibet)',
+  related:['Luật không mâu thuẫn','Phản chứng','Nghịch lý']},
+
+{id:37,cat:'c4',
+  title:'Vòng tròn luận chứng',en:'Circular Reasoning (Begging the Question)',
+  tagline:'Kết luận được dùng như tiền đề — lập luận không tiến được đâu',
+  notation:'P ⊢ P (trivially valid, non-informative)',
+  desc:'Circular reasoning (petitio principii, "begging the question") xảy ra khi kết luận được giả định trong tiền đề — dù ẩn hay rõ ràng. Về mặt hình thức có thể hợp lệ nhưng không cung cấp bất kỳ hỗ trợ thực chất nào.',
+  points:['Trực tiếp: "P vì P" — tự rõ ràng và vô nghĩa','Gián tiếp: chuỗi dài hơn nhưng cuối cùng quay lại điểm đầu','Rất khó phát hiện khi chuỗi đủ dài','Ví dụ cổ điển trong thần học, triết học đạo đức'],
+  example:'"Kinh thánh đúng vì đó là lời Chúa. Chúa tồn tại vì kinh thánh nói vậy"\n→ Vòng tròn 2 bước\n\n"Anh ấy đáng tin cậy vì anh ấy không bao giờ nói dối. Tôi biết anh không nói dối vì anh là người đáng tin cậy."\n\n"Nha phiến gây ngủ vì nó có tính chất gây ngủ" (Molière)\n→ Giải thích không thêm thông tin mới',
+  formula:'P ⊢ P (circular: conclusion = premise)',
+  related:['Ngụy biện hình thức','Lập luận','Petitio principii']},
+
+{id:38,cat:'c4',
+  title:'Non Sequitur',en:'Non Sequitur',
+  tagline:'Kết luận không theo sau từ tiền đề — không có kết nối logic',
+  notation:'P ⊬ C (no logical connection)',
+  desc:'Non sequitur ("không theo sau") là lập luận mà kết luận không có quan hệ logic với tiền đề. Đây là dạng tổng quát của nhiều ngụy biện: kết luận đơn giản là không được hỗ trợ bởi bằng chứng đưa ra.',
+  points:['Kết luận nhảy quá xa từ bằng chứng','Thường dùng trong quảng cáo (irrelevant conclusion)','Cũng xuất hiện trong lập luận cảm tính','Phát hiện: "Bằng chứng này có thực sự hỗ trợ kết luận không?"'],
+  example:'Quảng cáo: "Người đẹp/thành công dùng X → bạn dùng X sẽ đẹp/thành công" ✗\n\n"Vận động viên này uống nước cam → nước cam tốt cho thể thao" ✗\n→ Tương quan không phải nhân quả, người mẫu ≠ bằng chứng\n\n"Tôi làm việc chăm chỉ. Anh ấy không cần tiền. → Anh ấy nên cho tôi tiền" ✗',
+  formula:'P → C requires logical connection, not just sequence',
+  related:['Tính hiệu lực','Nhân quả vs Tương quan','Ngụy biện phi hình thức']},
+
+{id:39,cat:'c4',
+  title:'Fallacy of Composition',en:'Fallacy of Composition',
+  tagline:'Những gì đúng với từng phần không nhất thiết đúng với toàn thể',
+  notation:'∀parts P(part) ⊬ P(whole)',
+  desc:'Ngụy biện kết hợp: vì mỗi phần của A có tính chất X, kết luận sai rằng toàn thể A có tính chất X. Toàn thể thường có tính chất khác và đôi khi đối lập với các bộ phận.',
+  points:['Bộ phận tốt ≠ toàn thể tốt (đội bóng với từng cầu thủ giỏi)','Cá nhân hợp lý ≠ tập thể hợp lý (nghịch lý tổng hợp)','Phân tử nhẹ ≠ vật thể làm từ chúng nhẹ','Đối lập: Fallacy of Division'],
+  example:'Mỗi cầu thủ tốt nhất trong vị trí của mình\n→ Đội của họ là đội tốt nhất ✗ (thiếu chemistry, system)\n\nNghịch lý tiết kiệm Keynes:\nMỗi cá nhân tiết kiệm là khôn ngoan\n→ Nếu toàn xã hội cùng tiết kiệm → suy thoái kinh tế ✗\n\nMỗi nguyên tử trong não không có ý thức → não không có ý thức ✗',
+  formula:'∀x∈S: P(x) ⊬ P(S) in general',
+  related:['Fallacy of Division','Emergence','Ngụy biện hình thức']},
+
+{id:40,cat:'c4',
+  title:'Fallacy of Division',en:'Fallacy of Division',
+  tagline:'Những gì đúng với toàn thể không nhất thiết đúng với từng phần',
+  notation:'P(whole) ⊬ ∀parts P(part)',
+  desc:'Ngụy biện phân chia: ngược lại với Fallacy of Composition. Vì toàn thể A có tính chất X, kết luận sai rằng mỗi phần của A cũng có tính chất X. Bỏ qua sự khác biệt của bộ phận trong toàn thể.',
+  points:['Đối lập của Fallacy of Composition','Tổng giàu ≠ từng người giàu (thu nhập trung bình và phân phối)','Tập thể giỏi ≠ từng thành viên giỏi như nhau','Tính chất nổi trội của toàn thể không có trong bộ phận'],
+  example:'"Mỹ là nước giàu mạnh nhất thế giới\n→ Mọi người Mỹ đều giàu" ✗ (có người nghèo)\n\n"Não bộ cực kỳ phức tạp và thông minh\n→ Từng neuron đơn lẻ đều thông minh" ✗\n\n"Công ty A rất có lợi nhuận\n→ Bộ phận X của công ty A cũng có lợi nhuận" ✗',
+  formula:'P(whole) ⊬ P(part) in general',
+  related:['Fallacy of Composition','Emergence','Ngụy biện hình thức']},
+
+{id:41,cat:'c5',core:true,
+  title:'Ad Hominem',en:'Ad Hominem Attack',
+  tagline:'Tấn công người lập luận thay vì lập luận của họ',
+  notation:'Attack person ≠ refute argument',
+  desc:'Ad hominem ("chống lại người") tấn công đặc điểm cá nhân của người lập luận thay vì phản bác nội dung lập luận. Dù người đó có thể đáng phê phán, điều này không làm lập luận của họ sai.',
+  points:['Abusive: tấn công tính cách, trình độ, uy tín','Circumstantial: "bạn nói vậy vì lợi ích của bạn"','Tu quoque: "bạn cũng làm vậy!" (two-wrongs)','Phân biệt: đôi khi nguồn gốc có liên quan (nhưng không quyết định đúng sai)'],
+  example:'"Lập luận của ông ta về biến đổi khí hậu sai vì ông ta ly hôn 3 lần."\n→ Cuộc sống cá nhân không liên quan đến tính đúng sai của luận điểm khoa học\n\nTu quoque:\n"Tại sao tôi phải nghe lời khuyên về hút thuốc từ bác sĩ hút thuốc?"\n→ Lời khuyên có thể đúng dù bác sĩ không thực hành',
+  warning:'Một ngụy biện phổ biến nhất trong tranh luận chính trị và mạng xã hội.',
+  formula:'Refuting person ≠ Refuting argument',
+  related:['Straw Man','Appeal to Authority','Genetic Fallacy']},
+
+{id:42,cat:'c5',core:true,
+  title:'Straw Man',en:'Straw Man Fallacy',
+  tagline:'Bóp méo lập luận đối phương cho dễ bác bỏ, rồi tuyên bố thắng',
+  notation:'Misrepresent(A) → attack misrepresentation',
+  desc:'Straw man (người rơm) là bóp méo, phóng đại hoặc đơn giản hóa lập luận của đối phương thành phiên bản dễ bác bỏ hơn, rồi bác bỏ phiên bản đó và tuyên bố đã bác bỏ lập luận gốc.',
+  points:['Cắt xén, phóng đại, hoặc đơn giản hóa quá mức lập luận gốc','Bác bỏ phiên bản giả mạo và tuyên bố thắng','Tránh phải đối mặt với lập luận thực sự','Phát hiện: "Đó có thực sự là điều đối phương nói không?"'],
+  example:'Người A: "Cần đầu tư thêm vào giáo dục công"\nNgười B: "Vậy anh muốn đốt tiền thuế vào thứ vô ích?"\n→ B bóp méo A thành người hoang phí\n\n"Các nhà khoa học tin vào tiến hóa nghĩa là họ tin người từ khỉ mà ra"\n→ Đây không phải điều tiến hóa nói',
+  warning:'Phổ biến nhất trong tranh luận chính trị. Hãy luôn "steel man" — tìm hiểu lập luận mạnh nhất của đối phương.',
+  formula:'Attack(misrepresentation) ≠ Attack(original argument)',
+  related:['Ad Hominem','Steel Man','Charitable Interpretation']},
+
+{id:43,cat:'c5',core:true,
+  title:'Appeal to Authority',en:'Appeal to Authority (Argumentum ad Verecundiam)',
+  tagline:'Dựa vào uy quyền thay vì bằng chứng và lý luận',
+  notation:'Expert says P ⊬ P (especially in wrong domain)',
+  desc:'Viện dẫn uy quyền không thích hợp: dùng ý kiến của người/tổ chức có uy tín như bằng chứng thay vì lý luận và chứng cứ thực sự. Đặc biệt nguy hiểm khi uy quyền không đúng lĩnh vực.',
+  points:['Legitimate appeal: chuyên gia đúng lĩnh vực + consensus','Fallacious: danh tiếng trong lĩnh vực khác, không phải chuyên gia thực sự','Consensus ≠ majority vote: khoa học không phải dân chủ','Phân biệt: chuyên gia đáng tham khảo nhưng cần kiểm chứng'],
+  example:'"Nhà vật lý đoạt Nobel này nói vaccine gây tự kỷ."\n→ Nobel Vật lý không phải chuyên gia y học\n\n"Einstein tin vào Chúa → Chúa tồn tại"\n→ Einstein không phải thần học gia\n\nHợp lệ: "WHO khuyến nghị đeo khẩu trang → đây là bằng chứng y tế tốt"\n→ Đúng lĩnh vực, có consensus, có thể kiểm chứng',
+  formula:'Valid authority: right domain + expertise + consensus + no conflict',
+  related:['Ad Hominem','Consensus vs Truth','Nhận thức luận']},
+
+{id:44,cat:'c5',
+  title:'Slippery Slope',en:'Slippery Slope Fallacy',
+  tagline:'Giả định không có bằng chứng rằng A dẫn đến hậu quả cực đoan Z',
+  notation:'A → B → C → ... → Z (unjustified chain)',
+  desc:'Dốc trượt tuyết: lập luận rằng một bước thay đổi nhỏ sẽ dẫn đến chuỗi hậu quả ngày càng tệ hơn mà không cần bằng chứng cho từng liên kết trong chuỗi. Đôi khi valid nếu có bằng chứng cho từng bước.',
+  points:['Mỗi liên kết trong chuỗi cần bằng chứng riêng','Không phải mọi "dốc trượt" đều là ngụy biện — một số có thể đúng','Ngụy biện khi: liên kết chưa được chứng minh nhưng được giả định','Thường được dùng để tạo nỗi sợ không có căn cứ'],
+  example:'Ngụy biện:\n"Cho phép hôn nhân đồng giới → sau đó người ta sẽ muốn kết hôn với thú vật"\n→ Không có bằng chứng cho liên kết này\n\nCó thể valid (với bằng chứng):\n"Giảm ngủ 2 tiếng/đêm → cortisol tăng → căng thẳng → sức khỏe suy giảm"\n→ Có nghiên cứu hỗ trợ từng bước',
+  formula:'Valid if: ∀i: P(Ai → Ai₊1) is supported by evidence',
+  related:['False Dilemma','Post hoc fallacy','Causal Reasoning']},
+
+{id:45,cat:'c5',
+  title:'Post Hoc Fallacy',en:'Post Hoc Ergo Propter Hoc',
+  tagline:'"Sau đó vì vậy do đó" — nhầm thứ tự thời gian với nhân quả',
+  notation:'A before B ⊬ A caused B',
+  desc:'"Post hoc ergo propter hoc" (sau, vì vậy là do đó) là suy luận sai rằng vì A xảy ra trước B, A gây ra B. Thứ tự thời gian là điều kiện cần nhưng không đủ để khẳng định nhân quả.',
+  points:['Điều kiện cần: nhân quả đòi hỏi A trước B (về mặt thời gian)','Điều kiện chưa đủ: cần loại trừ trùng hợp, biến nhiễu','Cơ sở của mê tín dị đoan và điều kiện hóa sai','Nguy hiểm trong y học dân gian và chính sách công'],
+  example:'Vận động viên mặc áo may mắn → đội thắng\n→ Áo gây ra chiến thắng ✗ (correlation, not causation)\n\nUống thuốc A → bệnh khỏi\n→ Thuốc A chữa bệnh? Có thể, nhưng cũng có thể tự khỏi\n→ Cần RCT (thử nghiệm ngẫu nhiên có kiểm soát)\n\nMinh oan: thiên nga đen không do thiên nga trắng gây ra',
+  formula:'temporal precedence ≠ causation',
+  related:['Nhân quả vs Tương quan','Confirmation bias','Suy luận quy nạp']},
+
+{id:46,cat:'c5',
+  title:'False Cause',en:'False Cause (Cum Hoc)',
+  tagline:'Nhầm tương quan đồng thời với quan hệ nhân quả',
+  notation:'A correlates with B ⊬ A caused B',
+  desc:'Khác với Post Hoc (thứ tự thời gian), False Cause (cum hoc ergo propter hoc — "với đó vì vậy do đó") nhầm tương quan đồng thời với nhân quả. Hai điều xảy ra cùng lúc không có nghĩa cái này gây ra cái kia.',
+  points:['Tương quan đồng thời ≠ nhân quả','Biến nhiễu: C gây ra cả A và B','Ngẫu nhiên: tương quan giả (spurious correlation)','Cần thiết kế thí nghiệm để phân biệt'],
+  example:'Doanh số kem và số vụ chết đuối tương quan cao\n→ Kem gây chết đuối? ✗\n→ Biến nhiễu: mùa hè nóng → cả hai tăng\n\nẢo giác "nhân quả ngược":\n"Bệnh viện là nơi nhiều người chết → bệnh viện gây chết"\n→ Thực ra: người ốm mới đến bệnh viện',
+  formula:'Correlation ≠ Causation (even concurrent)',
+  related:['Post Hoc Fallacy','Nhân quả vs Tương quan','Biến nhiễu']},
+
+{id:47,cat:'c5',
+  title:'Appeal to Ignorance',en:'Appeal to Ignorance (Ad Ignorantiam)',
+  tagline:'Vì chưa chứng minh sai, nghĩa là đúng — hoặc ngược lại',
+  notation:'¬proven(¬P) ⊬ P',
+  desc:'Viện dẫn sự ngu dốt: lập luận rằng vì không có bằng chứng chứng minh X sai, X phải đúng (hoặc ngược lại). Thiếu bằng chứng không phải bằng chứng của sự thiếu.',
+  points:['Dạng 1: "Không ai chứng minh UFO không tồn tại → UFO tồn tại"','Dạng 2: "Không có bằng chứng Chúa → Chúa không tồn tại"','Nguyên tắc: gánh nặng chứng minh thuộc về người khẳng định','Ngoại lệ: trong pháp lý "vô tội cho đến khi chứng minh có tội"'],
+  example:'"Không có ai chứng minh ma không tồn tại → ma tồn tại" ✗\n\n"Khoa học chưa giải thích được ý thức hoàn toàn → Có thế giới tâm linh" ✗\n→ Thiếu giải thích ≠ bằng chứng cho giải thích thay thế\n\nBertrand Russell Teapot:\n"Tôi nói có ấm trà quay quanh mặt trời. Bạn không thể chứng minh không có. → Tôi đúng?" ✗',
+  formula:'Burden of proof lies with the one making positive claim',
+  related:['Falsifiability','Nhận thức luận','Ad Hominem']},
+
+{id:48,cat:'c5',
+  title:'Genetic Fallacy',en:'Genetic Fallacy',
+  tagline:'Đánh giá lập luận dựa trên nguồn gốc thay vì nội dung',
+  notation:'Origin(A) → Valid/Invalid(A) (invalid inference)',
+  desc:'Ngụy biện nguồn gốc: đánh giá đúng sai của một lập luận, ý tưởng hay tuyên bố dựa trên nguồn gốc của nó (ai nói, từ đâu, hoàn cảnh nào) thay vì dựa trên bằng chứng và lý luận.',
+  points:['Khác với Ad Hominem: ở đây tập trung vào nguồn gốc ý tưởng, không chỉ người nói','Ý tưởng tốt từ nguồn xấu vẫn là ý tưởng tốt','Ý tưởng xấu từ nguồn tốt vẫn là ý tưởng xấu','Đánh giá nội dung, không nguồn gốc'],
+  example:'"Ý kiến này xuất phát từ người không có học thức → sai" ✗\n→ Đôi khi người không học có quan sát thực tiễn đúng\n\n"Thuyết tiến hóa được người vô thần ủng hộ → đây là thuyết vô thần" ✗\n→ Tính đúng sai không phụ thuộc người ủng hộ\n\nAd Fontem Fallacy: "Nietzsche nói X. Nietzsche là triết gia Nazi. → X sai" ✗',
+  formula:'Truth value of P ≠ f(origin of P)',
+  related:['Ad Hominem','Appeal to Authority','Xét đánh giá nội dung']},
+
+{id:49,cat:'c5',
+  title:'Equivocation',en:'Equivocation Fallacy',
+  tagline:'Dùng từ đa nghĩa trong cùng lập luận với hai nghĩa khác nhau',
+  notation:'Term T used as T1 and T2 (T1 ≠ T2)',
+  desc:'Ngụy biện đánh đồng nghĩa: dùng một từ với hai nghĩa khác nhau trong cùng một lập luận, làm cho lập luận có vẻ hợp lệ nhưng thực ra chứa mơ hồ ngữ nghĩa. Liên quan đến Fallacy of Four Terms.',
+  points:['Phải xác định rõ nghĩa của mỗi từ quan trọng','Từ kỹ thuật và ngôn ngữ thông thường thường khác nghĩa','Phát hiện: thay thế từ bằng nghĩa cụ thể để kiểm tra','Nguy hiểm nhất khi từ chuyển nghĩa tinh tế'],
+  example:'"Chỉ con người mới có lý trí. Không có gì là hoàn hảo.\nVậy con người không hoàn hảo."\n→ "Không có gì" = "Nothing" (not any thing) nhưng dùng như\n   "No being" — đánh đồng hai nghĩa\n\nKhoa học: "Thuyết tiến hóa chỉ là một LÝ THUYẾT"\n→ "lý thuyết" trong khoa học = hệ thống giải thích đã kiểm chứng\n   "lý thuyết" trong thường ngày = phỏng đoán',
+  formula:'P valid only if all terms used univocally (one meaning)',
+  related:['Fallacy of Four Terms','Ambiguity','Logic hình thức']},
+
+{id:50,cat:'c5',
+  title:'Appeal to Emotion',en:'Appeal to Emotion (Ad Passiones)',
+  tagline:'Dùng cảm xúc thay cho bằng chứng và lý luận',
+  notation:'Emotion(E) ⊬ Truth(P)',
+  desc:'Viện dẫn cảm xúc sử dụng cảm giác mạnh (sợ hãi, tội lỗi, thương hại, tự hào) để thuyết phục thay vì bằng chứng logic. Cảm xúc không thể xác định tính đúng sai của một tuyên bố.',
+  points:['Appeal to fear: "Nếu không ủng hộ X, điều khủng khiếp sẽ xảy ra"','Appeal to pity: thay vì bằng chứng, dùng hoàn cảnh khó khăn','Bandwagon: "Mọi người đều làm vậy → bạn cũng nên"','Phân biệt: cảm xúc có thể liên quan nhưng không phải bằng chứng'],
+  example:'Quảng cáo: Hình ảnh trẻ em đang đói\n→ Không giải thích hiệu quả của tổ chức từ thiện\n→ Kêu gọi thương hại thay vì bằng chứng về tác động\n\nChính trị:\n"Hãy nghĩ đến trẻ em!" (without evidence)\n"Chúng tôi tự hào về X" → X không nhất thiết đúng\n\nBullying logic: "Nếu không đồng ý với tôi, bạn không là người tốt"',
+  formula:'Emotion ≠ Evidence; relevant emotion ≠ sufficient evidence',
+  related:['Ad Hominem','Appeal to Authority','Rhetoric']},
+
+{id:51,cat:'c5',
+  title:'Bandwagon Fallacy',en:'Bandwagon (Ad Populum)',
+  tagline:'Vì nhiều người tin vào điều đó, nên điều đó đúng',
+  notation:'Popular(P) ⊬ True(P)',
+  desc:'Viện dẫn số đông (ad populum): vì nhiều người tin X, vì X phổ biến, nên X đúng. Sự phổ biến không có quan hệ nhân quả với chân lý. Lịch sử đầy những điều đám đông sai.',
+  points:['Popularity ≠ truth (Galileo, Semmelweis)','Consensus khoa học ≠ popular vote','Là bằng chứng rất yếu cho sự thật nhưng mạnh cho xã hội học','Một mình đúng trước đám đông sai là điều có thể'],
+  example:'Xưa: "Hàng tỷ người tin Trái Đất là trung tâm vũ trụ → đúng" ✗\n\nThị trường tài chính:\n"Mọi người đang mua cổ phiếu X → X là đầu tư tốt" ✗\n→ Bong bóng tài chính hình thành từ logic này\n\nMạng xã hội:\n"Bài viết triệu like → chính xác" ✗',
+  formula:'Popularity(P) ≠ Truth(P)',
+  related:['Appeal to Authority','Confirmation bias','Social proof']},
+
+{id:52,cat:'c5',
+  title:'False Analogy',en:'False Analogy',
+  tagline:'Dùng phép so sánh không tương đồng để biện hộ cho kết luận',
+  notation:'A ~ B (superficially) ⊬ A.property → B.property',
+  desc:'Phép loại suy sai: dùng tương đồng bề mặt giữa hai thứ để lập luận chúng có cùng thuộc tính, mặc dù có sự khác biệt quan trọng. Phép loại suy chỉ hợp lệ khi những điểm giống nhau là liên quan đến thuộc tính đang xét.',
+  points:['Tương đồng bề mặt ≠ tương đồng cơ bản','Phải kiểm tra: sự tương đồng có liên quan đến thuộc tính xét không?','Thường mạnh cảm xúc nhưng yếu logic','Yêu cầu chỉ ra sự khác biệt quan trọng để phản bác'],
+  example:'"Não giống máy tính → lập trình lại não như reset máy tính"\n→ Khác biệt: não có neuroplasticity, cảm xúc, ý thức... rất khác\n\n"Công ty như gia đình → CEO như cha" \n→ Thiếu nhiều thứ: gia đình không sa thải bạn, không có lợi nhuận...\n\n"Tiêm vaccine giống tra tấn vì cả hai gây đau"\n→ Mục đích và tác động hoàn toàn khác',
+  formula:'Analogy strong if: relevant similarities >> relevant differences',
+  related:['Phép loại suy','Straw Man','Ad Hominem']},
+
+{id:53,cat:'c6',core:true,
+  title:'Steel-manning',en:'Steel Man Argument',
+  tagline:'Xây dựng và đối mặt với phiên bản mạnh nhất của lập luận đối lập',
+  notation:'Oppose best(A), not worst(A)',
+  desc:'Steel-manning là đối lập với Straw Man: thay vì bóp méo lập luận đối phương, hãy tìm hiểu và trình bày phiên bản mạnh nhất, hợp lý nhất có thể. Đây là đỉnh cao của tư duy phản biện và trí tuệ.',
+  points:['Buộc bạn hiểu thực sự quan điểm đối lập','Tìm điểm đúng trong lập luận đối phương trước khi phản bác','Nếu bác bỏ được phiên bản mạnh → lập luận của bạn thực sự mạnh','Xây dựng niềm tin và tôn trọng trong tranh luận'],
+  example:'Người phản đối chính sách X đưa ra lập luận yếu nhất\n→ STRAW MAN: bác bỏ lập luận yếu đó\n→ STEEL MAN: "Lập luận tốt nhất chống X là... [giải thích rõ ràng]\nTuy nhiên, điểm này có thể đáp lại bởi..."\n\nElon Musk về Mars:\nKhông phải: "Tại sao lãng phí tiền vào sao Hỏa?"\nMà: "Nếu Trái Đất bị tuyệt chủng, backup civilization là cần thiết. Tuy nhiên..."',
+  formula:'Engage with Best(opponent) = intellectual honesty',
+  related:['Straw Man','Nguyên tắc bác ái','Critical Thinking']},
+
+{id:54,cat:'c6',core:true,
+  title:'Socratic Method',en:'Socratic Method',
+  tagline:'Đặt câu hỏi liên tiếp để làm rõ và kiểm tra niềm tin',
+  notation:'Q1 → A1 → Q2 → A2 → ... → insight/contradiction',
+  desc:'Phương pháp Socrates: thay vì tuyên bố sự thật, đặt câu hỏi liên tiếp đi sâu dần, dẫn người đối thoại khám phá mâu thuẫn trong lập luận của họ hoặc tự tìm ra sự thật. Elenchus — phương pháp bác bỏ thông qua hỏi.',
+  points:['Bắt đầu với câu hỏi đơn giản, mở rộng dần','Phát hiện giả định ẩn chứa trong niềm tin của người đối thoại','Dẫn đến aporia (sự bế tắc) — nhận ra mình không biết','Từ aporia đến hiểu biết thực sự'],
+  example:'Xét khái niệm "Dũng cảm":\nSocrates: "Dũng cảm là gì?"\nLaches: "Là đứng vững trong trận chiến"\nS: "Nhưng có những người dũng cảm nhờ rút lui chiến thuật — họ dũng cảm không?"\nL: "Vâng, dũng cảm là kiên trì trong mọi hoàn cảnh"\nS: "Nhưng kiên trì ngu ngốc có phải dũng cảm không?"\n→ Nhận ra định nghĩa ban đầu quá đơn giản',
+  formula:'Question → clarification → deeper question → ... → insight',
+  related:['Critical Thinking','Epistemology','Intellectual Humility']},
+
+{id:55,cat:'c6',
+  title:'Nguyên tắc bác ái',en:'Principle of Charity',
+  tagline:'Luôn giải thích lập luận của người khác theo cách tốt nhất có thể',
+  notation:'Interpret(A) = best_possible(A)',
+  desc:'Nguyên tắc bác ái yêu cầu khi đối mặt với lập luận mơ hồ hoặc chưa rõ ràng, hãy giải thích theo cách mạnh nhất và hợp lý nhất có thể thay vì phiên bản dễ phản bác nhất. Đây là tiêu chuẩn trí tuệ học thuật.',
+  points:['Giải thích mơ hồ theo nghĩa mạnh nhất','Điền vào chỗ thiếu theo cách hợp lý nhất','Tránh tìm lỗi nhỏ không quan trọng để đánh lạc hướng','Trái ngược: Uncharitable Interpretation (strawman)'],
+  example:'"Người nói X" — nếu câu mơ hồ:\nKHÔNG bác ái: chọn nghĩa yếu nhất và bác bỏ nó\nCÓ bác ái: "Tôi hiểu X theo nghĩa mạnh nhất là [Y]. Và nếu Y thì..."\n\nKhoa học: khi đọc paper đối lập, hiểu đúng phương pháp của họ\nThay vì tìm lỗi nhỏ: "Kết quả của họ có ý nghĩa gì với lý thuyết của tôi?"',
+  formula:'Best interpretation(argument) before evaluation',
+  related:['Steel Man','Straw Man','Socratic Method']},
+
+{id:56,cat:'c6',
+  title:'Burden of Proof',en:'Burden of Proof',
+  tagline:'Người khẳng định có trách nhiệm đưa ra bằng chứng',
+  notation:'Onus probandi: asserter must prove',
+  desc:'Gánh nặng chứng minh: người đưa ra tuyên bố (đặc biệt tuyên bố bất thường) có trách nhiệm cung cấp bằng chứng. Người nghi ngờ không cần chứng minh tuyên bố sai — chỉ cần chỉ ra thiếu bằng chứng đủ.',
+  points:['Tuyên bố mạnh cần bằng chứng mạnh','Hitchens Razor: "What can be asserted without evidence can be dismissed without evidence"','Trong pháp lý: vô tội cho đến khi chứng minh có tội','Extraordinary claims require extraordinary evidence (Sagan)'],
+  example:'"Alien tồn tại và đã đến Trái Đất"\n→ Gánh nặng chứng minh thuộc về người khẳng định, không phải người hoài nghi\n\n"Thuốc X chữa được ung thư"\n→ Phải có RCT, không phải "hàng nghìn người làm chứng"\n\nShifting burden:\n"Chứng minh đi rằng nó KHÔNG có tác dụng"\n→ Không — gánh nặng thuộc về người khẳng định',
+  formula:'Asserter carries burden of proof; skeptic needs only note insufficient evidence',
+  related:['Appeal to Ignorance','Falsifiability','Nhận thức luận']},
+
+{id:57,cat:'c6',
+  title:'Phân tích lập luận',en:'Argument Analysis',
+  tagline:'Tách cấu trúc của lập luận: tiền đề, kết luận, và liên kết',
+  notation:'identify: Premises, Conclusion, Structure',
+  desc:'Kỹ năng phân tích lập luận là nền tảng của tư duy phản biện: xác định tiền đề ẩn và rõ, kết luận thực sự được đưa ra, cấu trúc logic kết nối chúng, và điểm yếu nhất trong chuỗi lý luận.',
+  points:['Xác định kết luận trước (thường ở đầu hoặc cuối)','Xác định tiền đề ủng hộ kết luận (thường có "vì", "bởi vì")','Tiền đề ẩn: giả định không được phát biểu rõ','Đánh giá: có tiền đề ẩn đáng nghi ngờ không?'],
+  example:'"Bạn nên ăn ít thịt đỏ hơn vì nghiên cứu cho thấy nó liên quan đến ung thư."\n→ Kết luận: ăn ít thịt đỏ\n→ Tiền đề rõ: nghiên cứu liên kết thịt đỏ - ung thư\n→ Tiền đề ẩn 1: mối liên hệ đó là nhân quả\n→ Tiền đề ẩn 2: bạn nên tránh những thứ liên quan đến ung thư\n→ Điểm yếu: "liên quan" ≠ "gây ra"',
+  formula:'Argument = Explicit Premises + Hidden Premises → Conclusion',
+  related:['Lập luận','Tiền đề','Critical Thinking']},
+
+{id:58,cat:'c6',
+  title:'Intellectual Humility',en:'Intellectual Humility',
+  tagline:'Nhận ra giới hạn tri thức của mình — điều kiện tiên quyết để học',
+  notation:'Know what you do not know',
+  desc:'Khiêm tốn trí tuệ là nhận thức về giới hạn của tri thức và sự dễ sai của bản thân — kể cả với những điều mình rất tin tưởng. Đây là phẩm chất trí tuệ quan trọng nhất theo Socrates ("Tôi biết rằng tôi không biết").',
+  points:['Nhận biết những gì bạn không biết — "known unknowns"','Cởi mở với khả năng sai — "unknown unknowns"','Cập nhật quan điểm khi có bằng chứng mạnh hơn','Tránh overconfidence: calibrated uncertainty'],
+  example:'Khác với sự không chắc chắn yếu đuối:\n"Tôi có thể sai" (intellectual humility)\nvs "Tôi không có ý kiến gì" (epistemic cowardice)\n\nHoặc ngược lại:\n"Tôi chắc 100% vào mọi niềm tin của mình" (overconfidence)\n\nEinstein: "Sự tưởng tượng quan trọng hơn kiến thức... kiến thức có giới hạn"\n\nBest forecasters (Tetlock): self-critical, update beliefs often',
+  formula:'Calibrated: P(belief) ∝ quality of evidence',
+  related:['Socratic Method','Critical Thinking','Dunning-Kruger']},
+
+{id:59,cat:'c6',
+  title:'Counterfactual Thinking',en:'Counterfactual Thinking',
+  tagline:'Suy nghĩ "nếu không có X, Y có xảy ra không?" để kiểm tra nhân quả',
+  notation:'¬A had occurred → ¬B? (counterfactual test)',
+  desc:'Lý luận phản thực tế: hỏi "nếu X không xảy ra, Y có xảy ra không?" để kiểm tra mối quan hệ nhân quả và hiểu hậu quả của quyết định. Đây là công cụ tư duy mạnh mẽ trong khoa học, lịch sử và cuộc sống.',
+  points:['Kiểm tra nhân quả: "Nếu không có A, B có xảy ra không?"','Học từ quyết định: "Nếu tôi chọn khác, kết quả như thế nào?"','Giới hạn: quá nhiều biến không biết trong lịch sử thực','RCT (thử nghiệm ngẫu nhiên) là counterfactual có kiểm soát tốt nhất'],
+  example:'Lịch sử: "Nếu Hitler bị chấp nhận vào Học viện Mỹ thuật Vienna..."\n→ Không thể biết chắc (too many variables)\n\nY học: "Bệnh nhân này dùng thuốc A. Nếu không dùng, có hồi phục không?"\n→ Cần control group để trả lời\n\nBusiness: "Nếu không giảm giá trong Q3, doanh số có giảm không?"\n→ A/B testing là counterfactual tốt',
+  formula:'Causal effect of A on B = outcome(A) - outcome(¬A)',
+  related:['Nhân quả vs Tương quan','Critical Thinking','Suy luận quy nạp']},
+
+{id:60,cat:'c6',
+  title:'Argument Mapping',en:'Argument Mapping',
+  tagline:'Vẽ sơ đồ trực quan mối quan hệ giữa các tiền đề và kết luận',
+  notation:'Visual: [P1] + [P2] → [C1] → [C2]',
+  desc:'Sơ đồ lập luận trực quan hóa cấu trúc của lập luận phức tạp: tiền đề, kết luận trung gian, objections và rebuttals. Giúp nhìn thấy điểm yếu và mâu thuẫn mà văn bản dài ẩn giấu.',
+  points:['Boxes: mệnh đề (tiền đề, kết luận, objection)','Arrows: liên kết hỗ trợ (support) hoặc phản bác (attack)','Giúp nhận ra tiền đề ẩn, liên kết yếu','Công cụ: Rationale, MindMup, hoặc giấy bút đơn giản'],
+  example:'Lập luận: "Đại học không đáng để đi học"\n[P1: Chi phí cao] + [P2: Nợ sinh viên lớn] → [C1: Gánh nặng tài chính]\n[P3: Nhiều thành công không cần bằng] → [C2: Bằng không cần thiết]\n[C1] + [C2] → [Conclusion: Không nên học ĐH]\n\nObjection: [P4: Mạng lưới quan hệ + thu nhập trung bình cao hơn] attacks [C2]',
+  formula:'Map = Nodes(propositions) + Edges(support/attack)',
+  related:['Phân tích lập luận','Critical Thinking','Lập luận']},
+
+{id:61,cat:'c6',
+  title:'Second-order Thinking',en:'Second-order Thinking',
+  tagline:'Hậu quả của hậu quả — suy nghĩ qua nhiều lớp tác động',
+  notation:'Consequences(A) → Consequences(Consequences(A))',
+  desc:'Tư duy bậc hai hỏi không chỉ "Điều này có nghĩa là gì?" (bậc 1) mà còn "Và hậu quả của hậu quả đó là gì?" (bậc 2, bậc 3...). Phần lớn lỗi chính sách và quyết định đến từ dừng lại ở tư duy bậc 1.',
+  points:['Bậc 1: tác động trực tiếp, ngắn hạn, rõ ràng','Bậc 2+: tác động gián tiếp, dài hạn, không rõ ràng','Unintended consequences: hậu quả ngoài ý muốn từ chính sách tốt','Cân bằng: đừng phân tích quá nhiều (paralysis by analysis)'],
+  example:'Kiểm soát giá thuê nhà:\nBậc 1: người thuê trả ít hơn ✓ (ý định tốt)\nBậc 2: chủ nhà bỏ thị trường, ít căn hộ hơn\nBậc 3: nguồn cung giảm → giá tăng thậm chí hơn\n\nCải tiến nông nghiệp:\nBậc 1: năng suất tăng → thực phẩm rẻ hơn\nBậc 2: nông dân nhỏ phá sản\nBậc 3: di cư đô thị → vấn đề xã hội mới',
+  formula:'Policy(X) → Effect1 → Effect2 → Effect3... (think ahead)',
+  related:['Systems Thinking','Critical Thinking','Suy luận quy nạp']},
+
+{id:62,cat:'c6',
+  title:'Inversion',en:'Inversion Thinking',
+  tagline:'Đảo ngược câu hỏi: thay vì hỏi "làm sao thành công?", hỏi "làm sao thất bại?"',
+  notation:'¬Goal → enumerate causes → avoid',
+  desc:'Tư duy đảo ngược: thay vì hỏi "Làm thế nào đạt được X?", hỏi "Điều gì chắc chắn dẫn đến ¬X?". Sau đó tránh những điều đó. Phương pháp của Carl Jacobi — toán học "đảo ngược, luôn luôn đảo ngược".',
+  points:['Liệt kê tất cả cách có thể gây thất bại/xấu','Thiết kế để loại bỏ những cái đó','Pre-mortem: "Tưởng tượng dự án đã thất bại — tại sao?"','Charlie Munger: "Nói với tôi nơi tôi sẽ chết, để tôi không đến đó"'],
+  example:'"Làm sao làm khách hàng hài lòng?"\n→ ĐẢO NGƯỢC: "Điều gì sẽ chắc chắn làm khách hàng tức giận?"\n→ Danh sách: giao hàng trễ, sản phẩm lỗi, CS tệ\n→ Tránh tất cả những cái đó\n\nMunger: "Tôi muốn biết nơi mình sẽ chết, để tôi không bao giờ đến đó"\n→ Pre-mortem analysis',
+  formula:'X = goal. Enumerate causes(¬X). Avoid all causes(¬X). ≈ achieve X.',
+  related:['Critical Thinking','Second-order Thinking','Mental Models']},
+
+{id:63,cat:'c7',core:true,
+  title:'Tập hợp và quan hệ',en:'Sets and Relations',
+  tagline:'Nền tảng của logic hiện đại: tập hợp, phần tử, và quan hệ giữa chúng',
+  notation:'∈, ⊆, ∩, ∪, ∅, Aᶜ',
+  desc:'Lý thuyết tập hợp (Cantor) cung cấp ngôn ngữ toán học cơ bản cho logic hiện đại. Khái niệm tập hợp, quan hệ thuộc về, giao, hợp, phần bù là nền tảng của tất cả toán học và logic hình thức.',
+  points:['Tập hợp: nhóm các phần tử phân biệt','Quan hệ: ∈ (thuộc về), ⊆ (tập con), = (bằng nhau)','Phép toán: ∩ (giao), ∪ (hợp), A\\B (hiệu), Aᶜ (bù)','Venn diagram: công cụ trực quan cho tập hợp'],
+  example:'A = {1, 2, 3}, B = {2, 3, 4}\nA ∩ B = {2, 3} (phần tử chung)\nA ∪ B = {1, 2, 3, 4} (tất cả)\nA\\B = {1} (trong A không trong B)\n\nỨng dụng logic:\n"Mọi chó đều là động vật": Dogs ⊆ Animals\n"Socrates là người": Socrates ∈ Humans',
+  formula:'A∩B = {x | x∈A ∧ x∈B}\nA∪B = {x | x∈A ∨ x∈B}',
+  related:['Logic vị từ','Lượng từ','Toán học']},
+
+{id:64,cat:'c7',
+  title:'Hệ thống Tiên đề',en:'Axiomatic Systems',
+  tagline:'Xây dựng toán học từ nền tảng không thể phủ nhận',
+  notation:'Axioms → Theorems (via valid proofs)',
+  desc:'Hệ thống tiên đề (axiomatic system) bắt đầu từ một tập hợp nhỏ các tiên đề (giả định không cần chứng minh) và xây dựng toàn bộ hệ thống qua chứng minh hợp lệ. Euclid là người đầu tiên áp dụng cho hình học.',
+  points:['Tiên đề: giả định nền tảng được chấp nhận không cần chứng minh','Định lý: được chứng minh từ tiên đề và định lý trước','Tính nhất quán: không thể suy ra mâu thuẫn từ hệ thống','Tính đầy đủ: mọi mệnh đề đúng đều có thể chứng minh'],
+  example:'Euclid 5 tiên đề hình học → toàn bộ hình học phẳng\nTiên đề 5 (parallel): mỗi đường thẳng và điểm ngoài nó,\nchỉ có đúng một đường song song qua điểm đó\n→ Thay đổi tiên đề 5 → hình học phi Euclid!\n\nZFC (Zermelo-Fraenkel + Choice):\nNền tảng tiên đề của toàn bộ toán học hiện đại',
+  formula:'Well-formed axiomatic system: consistent + complete',
+  related:['Chứng minh trực tiếp','Logic toán học','Định lý bất toàn Gödel']},
+
+{id:65,cat:'c7',
+  title:'Định lý bất toàn Gödel',en:"Gödel's Incompleteness Theorems",
+  tagline:'Mọi hệ thống tiên đề đủ mạnh đều có mệnh đề đúng nhưng không thể chứng minh',
+  notation:'∃P: P true ∧ P unprovable (in consistent system)',
+  desc:'Năm 1931, Kurt Gödel chứng minh rằng bất kỳ hệ thống tiên đề nhất quán nào đủ mạnh để diễn tả số học đều có những mệnh đề đúng nhưng không thể chứng minh trong hệ thống đó. Đây là một trong những khám phá toán học vĩ đại nhất.',
+  points:['Định lý 1: Mọi hệ thống đủ mạnh đều bất toàn','Định lý 2: Không thể chứng minh nhất quán của hệ thống từ bên trong','Giới hạn cơ bản của toán học và logic hình thức','Có ý nghĩa triết học sâu sắc về giới hạn tri thức'],
+  example:'Mệnh đề Gödel (G): "Mệnh đề này không thể chứng minh"\nNếu G chứng minh được → mệnh đề nói mình không chứng minh được → mâu thuẫn!\nNếu G không chứng minh được → G đúng! → hệ thống bất toàn\n\n→ Giống Liar Paradox: "Câu này là sai"\nMọi hệ thống đủ phức tạp đều có "điểm mù" như thế này',
+  formula:'Consistent(S) ∧ Sufficient(S) → ∃G: True(G) ∧ ¬Provable_S(G)',
+  related:['Hệ thống Tiên đề','Logic toán học','Nghịch lý']},
+
+{id:66,cat:'c7',
+  title:'Logic mệnh đề',en:'Propositional Logic',
+  tagline:'Hệ thống hình thức nghiên cứu quan hệ logic giữa các mệnh đề',
+  notation:'PL: {P, Q, R, ∧, ∨, ¬, →, ↔}',
+  desc:'Logic mệnh đề (propositional logic, zero-order logic) là hệ thống hình thức cơ bản nhất nghiên cứu quan hệ logic giữa các mệnh đề thông qua liên từ logic. Nó không quan tâm đến nội dung bên trong mệnh đề.',
+  points:['Ngôn ngữ: mệnh đề nguyên tử + liên từ','Semantic: bảng chân trị','Syntactic: hệ thống chứng minh (axioms + rules)','Soundness và Completeness: PL là cả hai'],
+  example:'Formalize lập luận:\n"Nếu học chăm hoặc tài năng, sẽ thành công.\nBạn không thành công.\nVậy bạn không học chăm và không tài năng."\n\n(H ∨ T) → S\n¬S\n⊢ ¬H ∧ ¬T\n\nBy MT: ¬S → ¬(H∨T) ≡ ¬H∧¬T ✓',
+  formula:'Soundness: ⊢P → ⊨P\nCompleteness: ⊨P → ⊢P',
+  related:['Mệnh đề','Liên từ logic','Logic vị từ']},
+
+{id:67,cat:'c7',
+  title:'Logic vị từ',en:'Predicate (First-order) Logic',
+  tagline:'Mở rộng logic mệnh đề với lượng từ và biến',
+  notation:'FOL: ∀x, ∃x, P(x), P(a,b)',
+  desc:'Logic vị từ bậc nhất (FOL, first-order logic) mở rộng logic mệnh đề bằng cách thêm lượng từ (∀, ∃), biến, và vị từ (predicates). Đây là hệ thống logic mạnh nhất được dùng rộng rãi trong toán học và khoa học máy tính.',
+  points:['Vị từ: P(x) — tính chất hoặc quan hệ','Hằng: a, b — đại diện cụ thể','Biến: x, y — đại diện bất kỳ phần tử nào','Lượng từ: ∀, ∃ — phát biểu về toàn bộ hoặc tồn tại'],
+  example:'"Mọi người đều có cha mẹ":\n∀x (Person(x) → ∃y∃z (Father(y,x) ∧ Mother(z,x)))\n\n"Có người không ai yêu":\n∃x (Person(x) ∧ ¬∃y Loves(y,x))\n\nTam đoạn luận Socrates:\n∀x (Human(x) → Mortal(x))\nHuman(Socrates)\n⊢ Mortal(Socrates)',
+  formula:'FOL = PL + Predicates + Quantifiers + Variables',
+  related:['Logic mệnh đề','Lượng từ','Tập hợp và quan hệ']},
+
+{id:68,cat:'c7',
+  title:'Logic Modal',en:'Modal Logic',
+  tagline:'Logic về tính tất yếu (□) và khả năng (◇)',
+  notation:'□P (necessarily P), ◇P (possibly P)',
+  desc:'Logic modal mở rộng logic mệnh đề với hai toán tử: □ (necessity — tất yếu) và ◇ (possibility — khả năng). Được dùng trong triết học, AI, và lý luận về trạng thái hệ thống.',
+  points:['□P: P đúng trong mọi thế giới có thể (necessarily)','◇P: P đúng trong ít nhất một thế giới có thể (possibly)','□P → P và P → ◇P','Deontic logic: □ cho "bắt buộc", ◇ cho "được phép"'],
+  example:'□(2+2=4): tất yếu đúng (toán học)\n◇(có sự sống trên sao Hỏa): có thể đúng\n¬◇(tồn tại vòng tròn vuông): không thể\n\nDeontic (nghĩa vụ):\n□(không được giết người): bắt buộc\n◇(ăn kem): được phép\n\nEpistemology:\n□(tôi biết P): tôi biết chắc P\n◇(P có thể đúng): P có thể đúng với kiến thức hiện tại',
+  formula:'□P ≡ ¬◇¬P\n◇P ≡ ¬□¬P',
+  related:['Logic mệnh đề','Nhận thức luận','Triết học']},
+
+{id:69,cat:'c7',
+  title:'Logic mờ',en:'Fuzzy Logic',
+  tagline:'Giá trị chân lý liên tục từ 0 đến 1 thay vì chỉ 0 hoặc 1',
+  notation:'T(P) ∈ [0,1] not just {0,1}',
+  desc:'Logic mờ (Lotfi Zadeh, 1965) mở rộng logic cổ điển cho phép giá trị chân lý liên tục từ 0 đến 1, phản ánh tốt hơn sự mơ hồ trong ngôn ngữ tự nhiên và thực tế. Rất hữu ích trong hệ thống điều khiển.',
+  points:['T(P) = 0.7 nghĩa là P "khá đúng"','Vague predicates: "cao", "nóng", "trẻ" có giá trị liên tục','Sorites Paradox: 1 hạt không phải đống, +1 hạt = đống?','Ứng dụng: điều hòa nhiệt độ, máy giặt thông minh, AI'],
+  example:'"Anh ta cao" — chiều cao 1.75m\nLogic cổ điển: cao hay không cao? (cần ngưỡng cứng)\nLogic mờ: T("cao", 1.75m) = 0.6 — khá cao\n\nSorites Paradox:\n1 hạt gạo không phải đống ✓\n2 hạt không phải đống ✓\n... thêm 1 hạt lúc nào thành đống?\n→ Ranh giới mờ — fuzzy logic xử lý tốt',
+  formula:'T(¬P) = 1 - T(P)\nT(P∧Q) = min(T(P), T(Q))',
+  related:['Logic mệnh đề','Luật bài trung','Nghịch lý']},
+
+{id:70,cat:'c7',
+  title:'Nghịch lý Logic',en:'Logical Paradoxes',
+  tagline:'Mệnh đề tự mâu thuẫn hoặc dẫn đến mâu thuẫn từ giả định hợp lý',
+  notation:'Liar: L = "This statement is false"',
+  desc:'Nghịch lý logic là mệnh đề hoặc tập hợp mệnh đề hợp lý dẫn đến kết luận mâu thuẫn. Chúng tiết lộ giới hạn của hệ thống logic và thúc đẩy sự phát triển của lý thuyết mới.',
+  points:['Liar Paradox: "Câu này là sai" — nếu đúng thì sai, nếu sai thì đúng','Russell Paradox: tập hợp tất cả tập hợp không chứa chính nó','Barber Paradox: người thợ cạo cạo râu cho tất cả người không tự cạo','Giải quyết: lý thuyết kiểu (type theory), logic phân cấp'],
+  example:'Liar Paradox:\nL: "Câu L là sai"\nNếu L đúng → nội dung L đúng → L sai → mâu thuẫn!\nNếu L sai → nội dung L sai → L đúng → mâu thuẫn!\n\nBarber Paradox:\n"Người thợ cạo cạo râu cho tất cả người trong làng không tự cạo"\n→ Ai cạo râu cho thợ cạo?\nNếu tự cạo → là người tự cạo → không cạo\nNếu không cạo → là người không tự cạo → phải cạo → mâu thuẫn!',
+  formula:'Resolution: eliminate self-reference or use type hierarchy',
+  related:['Tự mâu thuẫn','Định lý bất toàn Gödel','Logic mờ']},
+
+{id:71,cat:'c7',
+  title:'Tính toán và Thuật toán',en:'Computability and Algorithms',
+  tagline:'Ranh giới giữa cái có thể và không thể tính toán',
+  notation:'Turing Machine, Halting Problem',
+  desc:'Alan Turing (1936) thiết lập lý thuyết tính toán: máy Turing, vấn đề dừng (halting problem), và giới hạn cơ bản của những gì có thể tính toán được. Đây là nền tảng của khoa học máy tính và logic tính toán.',
+  points:['Halting Problem: không có thuật toán tổng quát nào xác định được liệu chương trình có dừng không','Church-Turing Thesis: mọi hàm tính được đều tính được bằng Turing machine','P vs NP: vấn đề lớn nhất chưa giải của khoa học máy tính','Decidability: một số vấn đề không thể giải được về nguyên tắc'],
+  example:'Halting Problem (không thể giải):\n"Cho chương trình P và input I, liệu P(I) có dừng không?"\n→ Không có thuật toán nào trả lời được trong mọi trường hợp\n(Turing chứng minh bằng diagonalization)\n\nP vs NP:\nP: giải nhanh (polynomial time)\nNP: kiểm tra nhanh nhưng giải không rõ nhanh không\n"P = NP?" → $1,000,000 prize chưa được giải',
+  formula:'P ⊆ NP; P = NP? unknown',
+  related:['Hệ thống Tiên đề','Định lý bất toàn Gödel','Logic toán học']},
+
+{id:72,cat:'c7',
+  title:'Lý thuyết trò chơi',en:'Game Theory',
+  tagline:'Logic của quyết định chiến lược khi kết quả phụ thuộc lẫn nhau',
+  notation:'Nash Equilibrium: ∀i, no player benefits by deviating',
+  desc:'Lý thuyết trò chơi (Von Neumann & Morgenstern) nghiên cứu ra quyết định chiến lược trong các tình huống mà kết quả của một người phụ thuộc vào quyết định của người khác. Nash Equilibrium là khái niệm trung tâm.',
+  points:['Nash Equilibrium: trạng thái không ai muốn thay đổi đơn phương','Zero-sum: một người thắng = người kia thua','Positive-sum: cả hai có thể cùng có lợi','Prisoner\'s Dilemma: lợi ích cá nhân ≠ lợi ích tập thể'],
+  example:"Prisoner's Dilemma:\n        | Im Lair | Betray\n---------------------------------------\nIm Lair | (3,3)   | (0,5)\nBetray  | (5,0)   | (1,1) ← Nash Equilibrium\n\nCả hai phản bội dù cùng khai là tốt hơn!\n→ Tại sao? Hợp tác là unstable nếu không có cam kết binding\n\nỨng dụng: đấu giá 5G, chính sách thương mại, quân sự",
+  formula:'NE: ∀i: si* ∈ argmax ui(si, s₋i*)',
+  related:['Logic quyết định','Nhân quả','Lý luận thực tiễn']},
+
+{id:73,cat:'c8',core:true,
+  title:'Tri thức và niềm tin',en:'Knowledge vs Belief',
+  tagline:'Tri thức = niềm tin đúng được biện hộ (Plato) — hay nhiều hơn thế?',
+  notation:'K(P) = JTB: Justified True Belief',
+  desc:'Nhận thức luận hỏi: tri thức là gì và chúng ta có thể biết gì? Định nghĩa cổ điển của Plato: tri thức là niềm tin đúng được biện hộ (JTB). Gettier (1963) chứng minh JTB không đủ.',
+  points:['Niềm tin (Belief): chấp nhận P là đúng','Đúng (Truth): P thực sự đúng','Biện hộ (Justification): có lý do tốt để tin P','Gettier Problem: JTB không đủ — có thể có JTB mà không có tri thức'],
+  example:'Gettier Case:\nBạn nhìn đồng hồ (dừng lúc 3h), đồng hồ hiện 3h, và thực sự đang là 3h\n→ Bạn có JTB: "Bây giờ là 3h"\nNhưng: đồng hồ đã dừng và bạn nhìn đúng lúc 3h = may mắn!\n→ Có phải tri thức thực sự không? Hầu hết nói "không"\n\nTriết học hiện đại: tri thức cần thêm điều kiện "không phải may mắn"',
+  formula:'Plato: K(P) = B(P) ∧ T(P) ∧ J(P)\nGettier: JTB is insufficient for K',
+  related:['Nhận thức luận','Skepticism','Intellectual Humility']},
+
+{id:74,cat:'c8',
+  title:'Hoài nghi luận',en:'Philosophical Skepticism',
+  tagline:'Có thể chúng ta không biết được gì cả — hay ít ra là ít hơn ta nghĩ',
+  notation:'¬K(P) for most/all P?',
+  desc:'Hoài nghi luận triết học đặt câu hỏi về khả năng tri thức thực sự. Từ hoài nghi cổ đại (Pyrrho) đến Descartes và ác quỷ lừa dối, đến hoài nghi hiện đại — liệu chúng ta có thể thực sự biết bất cứ điều gì?',
+  points:['Hoài nghi Descartes: "Tôi nghĩ vậy tôi tồn tại" (cogito ergo sum)','Evil Demon scenario: điều gì nếu mọi giác quan bị lừa dối?','Brain in a vat: Nozick — không thể phân biệt','Pragmatic response: một số hoài nghi không thực tiễn'],
+  example:'Descartes Method of Doubt:\n"Tôi có thể nghi ngờ tất cả — giác quan, toán học, thực tế\nNhưng không thể nghi ngờ rằng tôi đang suy nghĩ\n→ Cogito ergo sum: Tôi nghĩ, vậy tôi tồn tại"\n\nBrain in a Vat:\nGiả sử bạn chỉ là não trong hộp, được kích thích bởi máy tính\nMọi trải nghiệm đều giống hệt thực tế\n→ Làm sao bạn biết bạn không phải là não trong hộp?',
+  formula:'Cartesian skepticism: ∀P: possibly ¬K(P)',
+  related:['Tri thức và niềm tin','Falsifiability','Nhận thức luận']},
+
+{id:75,cat:'c8',
+  title:'Epistemic Justification',en:'Epistemic Justification',
+  tagline:'Cái gì biến niềm tin thành niềm tin được biện hộ hợp lý?',
+  notation:'Foundationalism, Coherentism, Reliabilism',
+  desc:'Làm thế nào để niềm tin được biện hộ hợp lý? Ba lý thuyết chính: Foundationalism (có niềm tin cơ sở tự biện hộ), Coherentism (niềm tin biện hộ lẫn nhau), Reliabilism (niềm tin đến từ quy trình tin cậy).',
+  points:['Foundationalism: tháp biện hộ trên nền móng tự chứng minh','Coherentism: mạng nhện — không có trung tâm','Reliabilism: Goldman — quy trình nhận thức tin cậy tạo tri thức','Regress problem: mọi biện hộ cần biện hộ khác → vô tận?'],
+  example:'Descartes là Foundationalist: "cogito" là nền tảng tự biện hộ\n\nCoherentism: niềm tin X hợp lý vì phù hợp với Y, Z, W...\nNhưng: có thể có nhiều hệ thống nhất quán đều sai\n\nReliabilism:\n"Nhìn bầu trời xanh → tin bầu trời xanh" là biện hộ tốt\nvì cơ chế thị giác là đáng tin cậy (reliably truth-tracking)',
+  formula:'Foundationalism: B1 → B2 → ... → Bn (self-evident)',
+  related:['Tri thức và niềm tin','Hoài nghi luận','Nhận thức luận']},
+
+{id:76,cat:'c8',
+  title:'A priori vs A posteriori',en:'A priori and A posteriori Knowledge',
+  tagline:'Tri thức không cần kinh nghiệm vs tri thức từ kinh nghiệm',
+  notation:'A priori: independent of experience; A posteriori: dependent',
+  desc:'Kant phân biệt hai loại tri thức: a priori (biết trước/không cần kinh nghiệm — toán học, logic) và a posteriori (biết sau/cần kinh nghiệm — khoa học, thực nghiệm). Cũng phân biệt phân tích vs tổng hợp.',
+  points:['A priori: "2+2=4", "Mọi tam giác có 180°" — đúng không cần quan sát','A posteriori: "Bầu trời xanh", "Nước sôi ở 100°C" — cần kinh nghiệm','Analytic: đúng theo nghĩa — "Mọi bà chồng đều đã kết hôn"','Synthetic: thêm thông tin mới — "Trái Đất tròn"'],
+  example:'A priori:\n"NẾU tất cả A là B, và tất cả B là C, THÌ tất cả A là C"\n→ Đúng mà không cần kiểm tra thực tế\n\nA posteriori:\n"DNA quyết định tính di truyền"\n→ Cần thực nghiệm để biết\n\nKant\'s synthetic a priori: "Không gian là 3 chiều"\n→ A priori (không cần đo) nhưng tổng hợp (thêm thông tin)?',
+  formula:'A priori ∩ Analytic (Hume), but also: Synthetic a priori (Kant)',
+  related:['Tri thức và niềm tin','Nhận thức luận','Logic toán học']},
+
+{id:77,cat:'c8',
+  title:'Tương đối luận nhận thức',en:'Epistemic Relativism',
+  tagline:'Sự thật phụ thuộc vào quan điểm, văn hóa, hoặc khung tham chiếu?',
+  notation:'T(P) relative to framework F',
+  desc:'Tương đối luận nhận thức cho rằng sự thật hoặc biện hộ là tương đối — không có sự thật tuyệt đối, khách quan. Từ tương đối văn hóa đến quan điểm của Protagoras "Con người là thước đo của vạn vật".',
+  points:['Protagoras: "Con người là thước đo mọi thứ"','Mạnh: mỗi người có quan điểm hợp lý từ góc nhìn của mình','Yếu: tự mâu thuẫn — "Tương đối luận là đúng" — đúng tương đối hay tuyệt đối?','Phân biệt: tương đối văn hóa (thực tế) và tương đối nhận thức (nguy hiểm)'],
+  example:'"Trái đất quay quanh mặt trời" — Tương đối luận nói gì?\nNếu tương đối hoàn toàn → trong khung tham chiếu của người trung cổ, nó sai → không có sự thật khoa học!\n\nTự mâu thuẫn:\n"Không có sự thật tuyệt đối nào" — có phải là tuyệt đối đúng không?\nNếu đúng → bác bỏ chính nó\nNếu sai → có sự thật tuyệt đối!',
+  formula:'Self-refuting: Relativism(R) is either absolutely true (⊥) or relative (?)',
+  related:['Hoài nghi luận','Nhận thức luận','Falsifiability']},
+
+{id:78,cat:'c8',
+  title:'Nhận thức luận đức hạnh',en:'Virtue Epistemology',
+  tagline:'Tri thức đến từ rèn luyện đức hạnh trí tuệ: tò mò, cởi mở, kiên nhẫn',
+  notation:'Knowledge = product of intellectual virtues',
+  desc:'Nhận thức luận đức hạnh (Sosa, Zagzebski) chuyển trọng tâm từ niềm tin sang người tạo ra niềm tin: tri thức là sản phẩm của việc thực hành các đức hạnh trí tuệ như tò mò, kiên nhẫn, cởi mở tư duy, và kiêm tốn.',
+  points:['Intellectual virtues: tò mò, cởi mở, kiên nhẫn, kiêm tốn','Epistemic vices: vội vã kết luận, lười suy nghĩ, quá cứng nhắc','Reliable belief-forming processes track intellectual virtues','Đức hạnh trí tuệ có thể rèn luyện — không phải bẩm sinh'],
+  example:'Nhà khoa học giỏi không chỉ có phương pháp đúng mà còn có:\n• Tò mò: hỏi câu hỏi tốt\n• Kiên nhẫn: làm thí nghiệm cẩn thận\n• Kiêm tốn: sẵn sàng bị chứng minh sai\n• Cởi mở: xem xét giả thuyết đối lập\n\nĐối lập với Epistemic Vice:\n• Vội vã: kết luận từ mẫu nhỏ\n• Thiên kiến xác nhận: chỉ tìm bằng chứng đồng ý\n• Kiêu ngạo: không chịu cập nhật',
+  related:['Intellectual Humility','Tri thức và niềm tin','Critical Thinking']},
+
+{id:79,cat:'c8',
+  title:'Testimony và Social Epistemology',en:'Social Epistemology',
+  tagline:'Phần lớn tri thức đến từ tin vào người khác — khi nào hợp lý?',
+  notation:'K via testimony: trust conditions',
+  desc:'Phần lớn tri thức của chúng ta đến không phải từ trực tiếp quan sát mà từ lời chứng thực (testimony) của người khác — thầy giáo, sách, chuyên gia. Khi nào hợp lý để tin vào lời chứng thực?',
+  points:['Reductionism: chỉ tin testimony khi có lý do độc lập','Anti-reductionism: tin mặc định trừ khi có lý do ngờ vực','Expertise: nhận dạng chuyên gia thực sự quan trọng','Epistemic injustice: khi nhóm bị bỏ qua không đúng'],
+  example:'Bạn không trực tiếp quan sát Thế chiến II\n→ Tin vào lịch sử/chứng nhân (testimony)\nKhi nào hợp lý? Khi:\n• Nhiều nguồn độc lập đồng thuận\n• Không có xung đột lợi ích rõ ràng\n• Phù hợp với hiểu biết tổng thể\n\nVaccine safety:\n→ 99.9% nhà khoa học đồng ý → testimony rất đáng tin\nvs. một bác sĩ duy nhất nói ngược lại (và có xung đột lợi ích)',
+  related:['Tri thức và niềm tin','Appeal to Authority','Nhận thức luận']},
+
+{id:80,cat:'c8',
+  title:'Doxastic Voluntarism',en:'Doxastic Voluntarism',
+  tagline:'Chúng ta có thể chọn tin vào điều gì không?',
+  notation:'Can we choose to believe P?',
+  desc:'Doxastic voluntarism hỏi liệu niềm tin có phải là tự nguyện không — liệu chúng ta có thể chọn tin vào điều gì đó. Hầu hết triết gia cho rằng niềm tin không hoàn toàn tự nguyện — bằng chứng buộc niềm tin.',
+  points:['Involuntarism: không thể tự quyết định tin P chỉ vì muốn','Indirect control: ảnh hưởng niềm tin gián tiếp qua điều tra, tiếp xúc','Pascal\'s Wager gặp vấn đề: không thể "chọn" tin Chúa để đặt cược','Liên quan đến epistemic responsibility'],
+  example:'Thử nghiệm:\nHãy thử TIN rằng trần nhà đang là sàn nhà\n→ Không thể đơn giản chọn tin điều đó!\n\nPascal\'s Wager vấn đề:\n"Đặt cược vào Chúa tồn tại — nếu đúng, lãi vô hạn"\nNhưng: không thể TIN chỉ vì muốn đặt cược\n\nTuy nhiên: gián tiếp có thể ảnh hưởng:\n• Tiếp xúc thông tin mới\n• Thay đổi môi trường văn hóa',
+  related:['Tri thức và niềm tin','Nhận thức luận','Epistemic Justification']},
+
+{id:81,cat:'c8',
+  title:'Bản thể luận',en:'Ontology',
+  tagline:'Nghiên cứu về bản chất của tồn tại: cái gì thực sự tồn tại?',
+  notation:'∃x — what kinds of x?',
+  desc:'Bản thể luận (ontology) là nhánh siêu hình học hỏi cái gì tồn tại, có những loại tồn tại nào, và cách chúng liên quan. Nó cung cấp nền tảng cho mọi khoa học và triết học.',
+  points:['Realism: tồn tại vật chất độc lập với tâm trí','Idealism: tồn tại phụ thuộc vào tâm trí (Berkeley: "esse est percipi")','Nominalism: chỉ cá thể tồn tại, không phải universal','Abstract objects: số, tập hợp, logic có tồn tại không?'],
+  example:'Số Pi có tồn tại không?\nPlatonism: Pi tồn tại trong thế giới trừu tượng độc lập với chúng ta\nNominalism: Pi chỉ là khái niệm hữu ích do con người tạo ra\n\nCây rơi trong rừng không ai nghe — có tiếng động không?\nRealism: có, rung động không khí tồn tại\nIdealism (Berkeley): không có tâm trí nào nhận thức → không tồn tại tiếng động',
+  related:['Nhận thức luận','Triết học','Tương đối luận']},
+
+{id:82,cat:'c8',
+  title:'Tự do ý chí',en:'Free Will and Determinism',
+  tagline:'Liệu quyết định của chúng ta có thực sự "tự do" hay đã được xác định?',
+  notation:'Determinism vs Libertarian Free Will vs Compatibilism',
+  desc:'Vấn đề tự do ý chí: liệu mọi sự kiện (kể cả quyết định của con người) có được xác định bởi nhân quả trước đó? Nếu vậy, "tự do" ý nghĩa gì? Ba lập trường chính: Determinism, Libertarianism, Compatibilism.',
+  points:['Hard Determinism: mọi sự kiện có nguyên nhân → không có tự do','Libertarian Free Will: tồn tại tự do thực sự, thoát khỏi nhân quả','Compatibilism: tự do và tất định có thể cùng tồn tại (free = uncoerced)','Neuroscience: quyết định bắt đầu trong não trước khi "ý thức" — Libet'],
+  example:'Libet Experiment (1983):\nNão "quyết định" uốn cổ tay 350ms TRƯỚC khi người đó có ý thức về ý định\n→ Hard Determinist: não làm, không phải "bạn"\n→ Compatibilist: "bạn" = não của bạn = không có mâu thuẫn\n\nCompatibilism:\n"Tự do" không phải là thoát khỏi nhân quả\nmà là hành động theo mong muốn mình mà không bị cưỡng ép',
+  related:['Bản thể luận','Nhân quả','Triết học']},
+
+{id:83,cat:'c9',core:true,
+  title:'Đặt câu hỏi đúng',en:'Asking the Right Questions',
+  tagline:'Câu hỏi hay quan trọng hơn câu trả lời hay',
+  notation:'Q* → better_answer than Q → best_answer',
+  desc:'Khả năng đặt câu hỏi đúng là kỹ năng tư duy thiết thực quan trọng nhất. Câu hỏi sai dẫn đến giải pháp tốt cho vấn đề sai. Einstein: "Nếu có 1 giờ để giải một vấn đề, tôi dành 55 phút để hiểu câu hỏi."',
+  points:['Reframing: đổi khung câu hỏi để thấy góc nhìn mới','5 Whys: đào sâu đến nguyên nhân gốc rễ','Mức độ trừu tượng: đặt câu hỏi ở đúng mức độ cụ thể/trừu tượng','Closed vs Open: câu hỏi mở tạo không gian khám phá lớn hơn'],
+  example:'VẤN ĐỀ: "Tại sao người ta không dùng sản phẩm của chúng tôi?"\n\nCâu hỏi sai: "Làm sao thuyết phục họ dùng?"\n→ Giả định sản phẩm đã tốt, chỉ cần thuyết phục\n\nCâu hỏi đúng hơn: "Tại sao họ không dùng? Jobs-to-be-done là gì?\nCó giải pháp nào tốt hơn không? Chúng ta đang giải đúng vấn đề chưa?"\n\nEinstein: 55 phút hiểu vấn đề + 5 phút giải quyết',
+  formula:'Better questions → better problem framing → better solutions',
+  related:['Socratic Method','First Principles','Critical Thinking']},
+
+{id:84,cat:'c9',
+  title:'Tư duy hệ thống',en:'Systems Thinking',
+  tagline:'Nhìn thấy kết nối, vòng phản hồi và xu hướng trong hệ thống phức tạp',
+  notation:'System = Stocks + Flows + Feedback Loops',
+  desc:'Tư duy hệ thống (Donella Meadows) nhìn nhận thế giới qua lăng kính hệ thống: kho chứa (stocks), dòng chảy (flows), và vòng phản hồi (feedback loops). Hầu hết vấn đề phức tạp cần cách tiếp cận này.',
+  points:['Reinforcing loops: khuếch đại (lãi kép, bong bóng)','Balancing loops: cân bằng (nhiệt độ phòng, dân số)','Delays: độ trễ gây ra dao động và quyết định sai','Leverage points: điểm can thiệp tạo thay đổi lớn nhất'],
+  example:'Dân số thế giới:\nStock: số người\nInflow: sinh\nOutflow: chết\nReinforcing loop: nhiều người → nhiều sinh\nBalancing loop: nhiều người → ít tài nguyên → nhiều chết\n\nTại sao chính sách thường thất bại?\nVì: can thiệp vào stock, không phải flow hay feedback\n→ Leverage point: thay đổi cấu trúc hệ thống',
+  formula:'dStock/dt = Inflow - Outflow (+ Feedback)',
+  related:['Second-order Thinking','Nhân quả','Mental Models']},
+
+{id:85,cat:'c9',
+  title:'Mô hình tư duy',en:'Mental Models',
+  tagline:'Lăng kính giúp hiểu thế giới — cần nhiều mô hình khác nhau',
+  notation:'World ≈ Model(World) — imperfect map',
+  desc:'Mental models (Charlie Munger) là các mô hình đơn giản hóa về cách thế giới hoạt động — công cụ tư duy giúp hiểu và dự đoán. Cần một "bộ công cụ" đa dạng từ nhiều lĩnh vực để tránh bóp méo thực tế.',
+  points:['Mỗi mô hình là đúng một phần và sai một phần','Cần mô hình từ nhiều lĩnh vực: vật lý, sinh học, kinh tế, tâm lý','Lưới tư duy (latticework): kết hợp mô hình để hiểu phức tạp','Munger: người chỉ có búa sẽ thấy mọi thứ đều là đinh'],
+  example:'Cùng một tình huống, nhiều mô hình:\nMô hình kinh tế: "Người ta hành động vì incentive"\nMô hình tâm lý: "Người ta hành động vì thiên kiến nhận thức"\nMô hình tiến hóa: "Người ta hành động vì heuristic tiến hóa"\n→ Tất cả đúng một phần → cần kết hợp\n\nMunger: "Ai chỉ biết kinh tế học không giỏi kinh tế"',
+  formula:'Good thinking = latticework of models from multiple domains',
+  related:['Tư duy hệ thống','Cognitive Biases','Critical Thinking']},
+
+{id:86,cat:'c9',
+  title:'Occam\'s Razor',en:"Occam's Razor (Parsimony)",
+  tagline:'Trong các giả thuyết tương đương, chọn cái đơn giản nhất',
+  notation:'entia non sunt multiplicanda praeter necessitatem',
+  desc:'"Dao cạo Occam" (William of Ockham, thế kỷ 14): "Không nhân thực thể quá mức cần thiết." Khi các giả thuyết giải thích bằng chứng tương đương nhau, ưu tiên giải thuyết đơn giản nhất — ít giả định nhất.',
+  points:['Đơn giản ≠ đúng hơn — chỉ ưu tiên khi giải thích như nhau','Liên quan đến parsimony trong khoa học','Không nên đơn giản hóa quá mức (Hitchens Counter-Razor)','Dùng trong khoa học: mô hình đơn giản hơn được ưu tiên'],
+  example:'"Thiên thể chuyển động vì..." \n• Ptolemy: hệ phức tạp epicycles\n• Copernicus/Newton: lực hấp dẫn đơn giản hơn → ưu tiên\n→ Không phải Ptolemy sai hoàn toàn, nhưng Newton đơn giản hơn và dự đoán tốt hơn\n\nY học:\n"Tôi bị đau đầu vì... khối u não (phức tạp) hay mệt mỏi/stress (đơn giản)?"\n→ Occam: mệt mỏi/stress trước (rồi xem xét phức tạp hơn nếu không giải thích được)',
+  formula:'Between equally predictive hypotheses, prefer H with fewer entities/assumptions',
+  related:['Suy luận quy nạp tốt nhất','Parsimony','Scientific Reasoning']},
+
+{id:87,cat:'c9',
+  title:'Nguyên tắc Feynman học tập',en:'Feynman Learning Technique',
+  tagline:'Nếu không giải thích đơn giản được, bạn chưa thực sự hiểu',
+  notation:'Explain → identify gaps → return to source → simplify',
+  desc:'Richard Feynman đề xuất kỹ thuật học tập hiệu quả nhất: giải thích khái niệm như thể dạy cho trẻ 12 tuổi. Nơi nào không giải thích được là nơi có lỗ hổng thực sự trong hiểu biết — quay lại học cho đến khi giải thích được đơn giản.',
+  points:['Bước 1: Chọn khái niệm và viết ra tất cả những gì biết','Bước 2: Giải thích đơn giản như cho trẻ em','Bước 3: Xác định chỗ mắc kẹt — đó là lỗ hổng thực sự','Bước 4: Quay lại tài liệu, học lại, đơn giản hóa thêm'],
+  example:'Thử giải thích Quantum Entanglement cho người 12 tuổi:\n"Hai hạt được tạo ra cùng nhau có thể có tính chất đối ngược nhau\ndù ở cách nhau bao xa. Đo một hạt thì ngay lập tức biết tính chất của hạt kia."\n\nNếu bạn không thể đơn giản hơn — bạn cần học thêm!\n\nFeynman: "Tôi không thể hiểu điều gì mà tôi không thể tạo ra được"',
+  formula:'Understanding(X) ↔ Can_explain_simply(X)',
+  related:['Intellectual Humility','Socratic Method','Learning']},
+
+{id:88,cat:'c9',
+  title:'Tư duy nguyên tắc đầu tiên',en:'First Principles Thinking',
+  tagline:'Phá vỡ vấn đề đến nền tảng không thể phủ nhận, rồi xây từ đầu',
+  notation:'Decompose → Axioms → Rebuild differently',
+  desc:'Tư duy nguyên lý nền tảng (first principles): thay vì lý luận bằng loại suy (làm như người khác đã làm), phân tích vấn đề xuống đến các sự thật nền tảng không thể chối cãi, rồi xây dựng lập luận từ đó. Elon Musk và Aristotle đều dùng.',
+  points:['Hỏi "Điều gì là đúng tuyệt đối?" thay vì "Người ta thường làm gì?"','Loại bỏ giả định và thông lệ chưa được kiểm chứng','Đặc biệt mạnh khi giải quyết vấn đề mới chưa có giải pháp','Tốn kém hơn loại suy nhưng cho kết quả đột phá hơn'],
+  example:'SpaceX (Elon Musk):\nLoại suy: "Rocket đắt vì công ty rocket nói vậy"\nFirst Principles: "Rocket làm từ vật liệu gì? Giá thị trường là bao nhiêu?\n→ Carbon fiber, nhôm, titan, thép — chỉ chiếm 2% giá rocket!\n→ Vấn đề ở quy trình, không phải nguyên liệu"\n→ SpaceX giảm chi phí 10x',
+  formula:'Don\'t reason by analogy, reason from fundamentals',
+  related:['Đặt câu hỏi đúng','Mô hình tư duy','Inversion']},
+
+{id:89,cat:'c9',
+  title:'Phân tích chi phí-lợi ích',en:'Cost-Benefit Analysis',
+  tagline:'Cân nhắc mọi chi phí và lợi ích của một quyết định — kể cả ẩn',
+  notation:'Decision: ΣBenefits vs ΣCosts (including opportunity costs)',
+  desc:'Phân tích CBA là framework thực tiễn cho ra quyết định: liệt kê và so sánh tất cả lợi ích và chi phí của một lựa chọn, bao gồm cả cơ hội bị bỏ lỡ (opportunity costs), giá trị tương lai được chiết khấu, và chi phí ẩn.',
+  points:['Opportunity cost: chi phí thực = lựa chọn tốt nhất đã từ bỏ','Sunk cost fallacy: chi phí đã bỏ không nên ảnh hưởng quyết định tương lai','Discount rate: lợi ích tương lai đáng ít hơn lợi ích hiện tại','Externalities: chi phí/lợi ích cho bên thứ ba'],
+  example:'Quyết định: Học sau đại học\nChi phí trực tiếp: học phí, sinh hoạt\nChi phí cơ hội: 4 năm lương bị bỏ lỡ\nLợi ích: lương cao hơn tương lai, kỹ năng, mạng lưới\n\nQuyết định: Dừng dự án đang làm\n→ Sunk cost (đã đầu tư): KHÔNG liên quan đến quyết định tiếp theo!\n→ Chỉ hỏi: "Tiếp tục hay dừng tốt hơn từ đây?"',
+  formula:'Net Value = PV(Benefits) - PV(Costs) - Opportunity Costs',
+  related:['Suy luận thực tiễn','Decision Theory','Opportunity Cost']},
+
+{id:90,cat:'c9',
+  title:'Lý luận đạo đức',en:'Ethical Reasoning',
+  tagline:'Các khung logic để đánh giá hành động đúng và sai',
+  notation:'Consequentialism, Deontology, Virtue Ethics',
+  desc:'Lý luận đạo đức áp dụng logic vào câu hỏi về điều đúng/sai. Ba framework chính: Consequentialism (kết quả), Deontology (nghĩa vụ/quy tắc), Virtue Ethics (đức tính). Mỗi framework cho kết quả khác nhau trong tình huống khó.',
+  points:['Consequentialism: hành động đúng = tối đa hóa kết quả tốt','Deontology (Kant): hành động đúng = tuân theo quy tắc đúng','Virtue Ethics: hành động đúng = người tốt sẽ làm gì?','Trolley Problem: không có câu trả lời đúng — khám phá trực giác đạo đức'],
+  example:'Trolley Problem:\nCó thể giết 1 để cứu 5?\nConsequentialism: có (5 > 1)\nDeontology: không (không được dùng người làm phương tiện)\nVirtue: người dũng cảm/nhân ái sẽ làm gì?\n\nCategorical Imperative (Kant):\n"Hãy hành động như thể nguyên tắc của bạn có thể trở thành luật tổng quát"\n→ Có thể nói dối để cứu người? Kant: không — nếu mọi người nói dối, ngôn ngữ mất nghĩa',
+  formula:'C: max Σwelfare; D: follow categorical imperative; V: what would virtuous person do?',
+  related:['Lý luận thực tiễn','Triết học','Nhận thức luận']},
+
+{id:91,cat:'c9',
+  title:'Tư duy xác suất ứng dụng',en:'Applied Probabilistic Thinking',
+  tagline:'Đưa ra quyết định tốt hơn bằng cách nghĩ về xác suất và giá trị kỳ vọng',
+  notation:'EV = Σ P(outcome_i) × value(outcome_i)',
+  desc:'Giá trị kỳ vọng (Expected Value) = tổng (xác suất × kết quả) của tất cả kịch bản. Đây là nền tảng của ra quyết định dưới bất định. Quyết định tốt không đảm bảo kết quả tốt — nhưng tối đa hóa EV là chiến lược đúng dài hạn.',
+  points:['EV = Σ P(i) × V(i) qua tất cả kết quả có thể','Quyết định tốt = tối đa hóa EV, không phải outcome tốt nhất','Đánh giá quyết định bằng quá trình ra quyết định, không chỉ kết quả','Kelly Criterion: phân bổ vốn tối ưu theo xác suất và payoff'],
+  example:'Nên mua bảo hiểm xe không?\n• Không mua: EV = -P(accident)×Cost(accident)\n• Mua: EV = -Premium (chắc chắn)\n→ Mua nếu: Premium < P(accident) × Cost × Risk_aversion_factor\n\nPoker:\n• Pot $100, call $20 để win\n• Nếu P(win) > 20/120 = 16.7% → call là đúng về EV\n• Dù có thể thua ván này',
+  formula:'EV = Σi P(outcome_i) × Value(outcome_i)',
+  related:['Tư duy xác suất','Lý thuyết quyết định','Bayesian Reasoning']},
+
+{id:92,cat:'c9',
+  title:'Khung tham chiếu và Reframing',en:'Reference Frames and Reframing',
+  tagline:'Cùng một thực tế, nhìn từ khung khác nhau cho insight khác nhau',
+  notation:'Problem P from frame F1 vs F2 vs F3',
+  desc:'Cùng một thực tế có thể được đặt trong nhiều khung tham chiếu khác nhau — mỗi khung làm nổi bật những khía cạnh khác nhau. Chuyển khung (reframing) là công cụ mạnh để phá vỡ lối mòn tư duy và tìm giải pháp mới.',
+  points:['Khung tiêu cực và tích cực: "cốc nửa đầy/nửa vơi"','Mức độ trừu tượng: zoom in/zoom out thay đổi insight','Khung không gian và thời gian: nhìn từ 10 năm sau?','Perspective-taking: đặt mình vào vị trí người khác'],
+  example:'Thay đổi khung không gian:\n"Sản phẩm thất bại ở Việt Nam" (cục bộ)\nvs "Sản phẩm phù hợp với thị trường phát triển hơn" (toàn cầu)\n\nThay đổi khung thời gian:\n"Chúng ta đang mất thị phần" (ngắn hạn)\nvs "Chúng ta đang đầu tư vào loyalty dài hạn" (dài hạn)\n\nProblem → Opportunity:\n"Toyota hết xe giao" → "Toyota có demand quá lớn cần mở rộng sản xuất"',
+  formula:'Reframe(Problem) = new_perspective → new_solutions',
+  related:['Đặt câu hỏi đúng','Mental Models','Critical Thinking']},
+
+{id:93,cat:'c10',core:true,
+  title:'Metacognition',en:'Metacognition',
+  tagline:'Tư duy về tư duy của chính mình',
+  notation:'Think(Think(X)) = metacognitive awareness',
+  desc:'Siêu nhận thức (metacognition, Flavell) là khả năng tư duy về quá trình tư duy của chính mình — nhận thức về cách mình học, suy nghĩ, và giải quyết vấn đề. Đây là kỹ năng học tập và tư duy cao cấp nhất.',
+  points:['Metacognitive knowledge: biết mình học/suy nghĩ như thế nào','Metacognitive regulation: kiểm soát và điều chỉnh quá trình nhận thức','Monitoring: "Tôi có thực sự hiểu không hay chỉ nghĩ là hiểu?"','Calibration: mức độ tự tin có phù hợp với khả năng thực sự không?'],
+  example:'"Illusion of knowing" — cảm giác hiểu khi chưa thực sự hiểu:\nĐọc sách và gật đầu liên tục → cảm giác hiểu\nGõ sách lại từ trí nhớ → lỗ hổng hiện ra\n\nHiệu ứng Dunning-Kruger là lỗi metacognition:\nNgười kém nhất overestimate nhất\n→ Thiếu metacognitive accuracy\n\nTest yourself: cách tốt nhất để biết thực sự hiểu chưa',
+  formula:'Metacognitive accuracy: |Confidence - Actual performance| → 0',
+  related:['Dunning-Kruger','Intellectual Humility','Feynman Technique']},
+
+{id:94,cat:'c10',
+  title:'Thiên kiến nhận thức',en:'Cognitive Biases',
+  tagline:'Các lỗi hệ thống có thể dự đoán được trong suy nghĩ và ra quyết định',
+  notation:'Systematic deviation from rationality',
+  desc:'Thiên kiến nhận thức (cognitive biases, Kahneman & Tversky) là các lỗi suy nghĩ có hệ thống và có thể dự đoán được — xuất phát từ heuristics (lối tắt tư duy) hữu ích nhưng không hoàn hảo.',
+  points:['Confirmation bias: chỉ tìm bằng chứng xác nhận đã tin','Anchoring: số đầu tiên nghe ảnh hưởng quá mức đến đánh giá','Availability: đánh giá xác suất qua dễ nhớ không qua thống kê','Sunk cost: chi phí đã bỏ ảnh hưởng quyết định tương lai'],
+  example:'Anchoring:\n"Lương đề xuất: 30 triệu" → bạn counter: 35 triệu\nvs "Lương đề xuất: 50 triệu" → bạn counter: 55 triệu\n→ Con số đầu tiên ảnh hưởng mạnh\n\nAvailability:\nSau vụ tai nạn máy bay lớn → overestimate rủi ro bay\nThực tế: ô tô nguy hiểm hơn nhiều về tỷ lệ chết/km\n\nConfirmation bias:\nĐọc tin tức: 90% chọn nguồn đồng ý quan điểm đã có',
+  formula:'Bias = Systematic(Heuristic) - Rational(Base rate)',
+  related:['Metacognition','Tư duy phản biện','Suy luận quy nạp']},
+
+{id:95,cat:'c10',
+  title:'Hiệu ứng Dunning-Kruger',en:'Dunning-Kruger Effect',
+  tagline:'Càng biết ít càng tự tin — và ngược lại',
+  notation:'Overconfidence ∝ 1/Competence (at low competence)',
+  desc:'Hiệu ứng Dunning-Kruger (1999): người có năng lực thấp thường đánh giá quá cao khả năng của mình (vì thiếu năng lực để nhận ra giới hạn), trong khi người có năng lực cao thường đánh giá thấp (vì biết nhiều hơn họ không biết).',
+  points:['"Double curse": không có kỹ năng và không có kỹ năng để nhận ra','Mount Stupid: đỉnh tự tin sau khi học một chút','Valley of Despair: nhận ra mình biết ít hơn nghĩ','Metacognitive accuracy thấp ở người có năng lực thấp'],
+  example:'Học lái xe:\nTháng 1: "Dễ thôi, tôi đã biết cách lái" (không biết mình không biết)\nTháng 3: "Ôi, còn nhiều thứ phức tạp quá" (Valley of Despair)\nNăm 2: tự tin thực sự dựa trên thực hành\n\nMạng xã hội:\nNgười bình luận tự tin nhất thường là người ít hiểu biết nhất\nvề chủ đề phức tạp (kinh tế vĩ mô, dịch bệnh, khoa học)',
+  formula:'Low competence → low metacognitive accuracy → overconfidence',
+  related:['Metacognition','Intellectual Humility','Critical Thinking']},
+
+{id:96,cat:'c10',
+  title:'Heuristics và System 1/2',en:'Dual Process Theory',
+  tagline:'Não có hai hệ thống: nhanh-tự động và chậm-có chủ đích',
+  notation:'System 1: fast, automatic; System 2: slow, deliberate',
+  desc:'Daniel Kahneman mô tả hai hệ thống tư duy: System 1 (nhanh, tự động, cảm tính, dùng heuristics) và System 2 (chậm, có chủ đích, logic, tốn năng lượng). Hầu hết thiên kiến nhận thức xuất phát từ System 1.',
+  points:['System 1: phản xạ, pattern recognition, cảm tính','System 2: phân tích, logic, đòi hỏi nỗ lực','Heuristics: lối tắt hữu ích nhưng không hoàn hảo','Cognitive ease: System 1 thích những gì quen thuộc, dễ xử lý'],
+  example:'System 1:\n• Đọc "2+2=?" → 4 ngay lập tức (không cần suy nghĩ)\n• Nhìn mặt người → cảm nhận ngay cảm xúc của họ\n• Tránh ra khi xe đến\n\nSystem 2:\n• "23×47=?" → cần tính toán có chủ đích\n• So sánh hai bảo hiểm phức tạp\n• Điền tờ khai thuế\n\nBẫy: "Cái cầu của bóng chày và quả bóng cộng lại 1.10$. Cái cầu đắt hơn quả bóng 1$. Quả bóng giá bao nhiêu?" → System 1 nói 0.10$ → SAI (0.05$)',
+  formula:'System 1: pattern + heuristic; System 2: deliberate + logical',
+  related:['Thiên kiến nhận thức','Metacognition','Decision Making']},
+
+{id:97,cat:'c10',
+  title:'Tư duy phản tư',en:'Reflective Thinking',
+  tagline:'Nhìn lại để học từ kinh nghiệm và điều chỉnh chiến lược tư duy',
+  notation:'Experience → Reflection → Conceptualization → Experiment',
+  desc:'Tư duy phản tư (Dewey, Schön) là quá trình có chủ đích nhìn lại hành động, kinh nghiệm, và kết quả để học hỏi — không chỉ thu thập kinh nghiệm mà còn suy nghĩ sâu về ý nghĩa và bài học của nó.',
+  points:['Kolb Learning Cycle: Experience → Reflect → Abstract → Apply','Double-loop learning (Argyris): không chỉ sửa hành vi mà sửa giả định','After Action Review (quân đội): "Điều gì xảy ra? Tại sao? Làm gì khác?"','Journaling: công cụ phổ biến nhất cho reflective thinking'],
+  example:'Single-loop learning:\n"Thực hiện sai → sửa hành vi → thực hiện đúng"\n\nDouble-loop learning:\n"Thực hiện sai → hỏi tại sao giả định/mục tiêu đặt ra có đúng không\n→ sửa giả định → thực hiện"\n\nAfter Action Review (quân đội):\n1. Điều gì lẽ ra phải xảy ra?\n2. Điều gì thực sự xảy ra?\n3. Tại sao có sự khác biệt?\n4. Học được gì?',
+  formula:'Reflection depth: Single-loop ⊂ Double-loop ⊂ Triple-loop',
+  related:['Metacognition','Critical Thinking','Learning']},
+
+{id:98,cat:'c10',
+  title:'Quản lý sự không chắc chắn',en:'Managing Uncertainty',
+  tagline:'Sống với bất định một cách khôn ngoan thay vì giả vờ chắc chắn',
+  notation:'Unknown Unknowns vs Known Unknowns',
+  desc:'Quản lý bất định là kỹ năng nhận biết và phân loại những gì ta biết, biết mình không biết, và không biết mình không biết — rồi ra quyết định phù hợp với từng loại bất định.',
+  points:['Known knowns: biết và biết mình biết','Known unknowns: biết là mình không biết (có thể điều tra)','Unknown unknowns: không biết mình không biết (nguy hiểm nhất)','Black Swans (Taleb): tác động cực lớn từ unknown unknowns'],
+  example:'Donald Rumsfeld (2002) — nổi tiếng về Known Unknowns:\n"Có những known knowns — điều chúng ta biết chúng ta biết.\nCó những known unknowns — điều chúng ta biết chúng ta không biết.\nNhưng có cả unknown unknowns — điều chúng ta không biết là chúng ta không biết."\n\nBất định trong kinh doanh:\n• Known: tỷ lệ churn hiện tại\n• Known unknown: tỷ lệ churn năm sau\n• Unknown unknown: đối thủ đột phá mới xuất hiện',
+  formula:'Risk = f(Known Unknowns); Deep Uncertainty = f(Unknown Unknowns)',
+  related:['Tư duy xác suất','Black Swans','Metacognition']},
+
+{id:99,cat:'c10',
+  title:'Nhận thức học xã hội',en:'Social Cognition',
+  tagline:'Cách suy nghĩ của ta bị định hình bởi bối cảnh và người khác',
+  notation:'Cognition is embedded in social context',
+  desc:'Nhận thức không xảy ra trong chân không — nó bị định hình sâu sắc bởi ngữ cảnh xã hội, ngôn ngữ, văn hóa, và sự hiện diện của người khác. Social cognition nghiên cứu cách chúng ta xử lý thông tin xã hội và làm thế nào nó ảnh hưởng đến tư duy.',
+  points:['Groupthink: đồng thuận áp lực làm mất tư duy độc lập','Echo chambers: môi trường chỉ nghe quan điểm đồng thuận','Theory of Mind: hiểu người khác có trạng thái tâm trí riêng','Social proof: dùng hành vi người khác để hướng dẫn hành vi mình'],
+  example:'Groupthink (Bay of Pigs Invasion, 1961):\nKennedy và advisors — tất cả đồng ý với kế hoạch sai\nVì: không ai muốn là người duy nhất bất đồng với Tổng thống\n→ Giải pháp: chỉ định "devil\'s advocate"\n\nEcho chambers trong mạng xã hội:\nAlgorithm → chỉ thấy nội dung đồng ý → confirmation bias\n→ "Tôi không biết ai bỏ phiếu cho X!" (Pauline Kael effect)',
+  related:['Thiên kiến nhận thức','Metacognition','Heuristics']},
+
+{id:100,cat:'c10',
+  title:'Tư duy toàn diện',en:'Integrative Thinking',
+  tagline:'Giữ nhiều mô hình mâu thuẫn cùng lúc và tổng hợp thành giải pháp tốt hơn',
+  notation:'Hold tension(A, ¬A) → synthesize C ⊃ A ∧ ¬A',
+  desc:'Tư duy tích hợp (Roger Martin) là khả năng giữ đồng thời hai mô hình, quan điểm, hay lập luận có vẻ mâu thuẫn nhau, và thay vì chọn một hoặc thỏa hiệp, tổng hợp ra mô hình mới tốt hơn cả hai. Đây là đặc điểm của các lãnh đạo xuất sắc.',
+  points:['Không phải "hoặc/hoặc" mà "cả và" (both/and)','Salient features: nhận ra đặc điểm quan trọng bị bỏ qua trong mỗi mô hình','Causality: hiểu cơ chế nhân quả khác nhau của mỗi mô hình','Resolution: tổng hợp ra mô hình mới không có trong ban đầu'],
+  example:'Chiến lược giá:\nMô hình A: Giảm giá → tăng thị phần\nMô hình B: Tăng giá → tăng brand equity\n\nTư duy OR: chọn A hoặc B\nTư duy tích hợp: "Khi nào giảm giá tốt? Khi nào tăng giá tốt?\nCó giải pháp nào không phải giá không? Làm thế nào để tăng cả hai?"\n→ Freemium model: cả hai cùng lúc ở segment khác nhau\n\nĐây là cách Steve Jobs nghĩ: "NOR, NEITHER" before "BOTH"',
+  formula:'Integrative solution: C where Value(C) > max(Value(A), Value(B))',
+  related:['Mô hình tư duy','Metacognition','Critical Thinking']},
+];
+
+const CAT_MAP = {};
+CATS.forEach(c => CAT_MAP[c.id] = c);
+
+let filterMode = 'all';
+let searchQ = '';
+let domainFilt = 'all';
+let viewMode = 'grid';
+let openId = null;
+
+function buildSidebar() {
+  const sb = document.getElementById('sidebar');
+  let h = `<div class="sb-sect-label">Chủ đề</div>
+  <div class="sb-item on" style="--active-c:var(--c1)" onclick="setDomain('all',this)">
+    <div class="sb-pip" style="background:#999"></div>Tất cả
+    <span class="sb-ct">${DATA.length}</span>
+  </div>`;
+  CATS.forEach(c => {
+    const cnt = DATA.filter(d=>d.cat===c.id).length;
+    h += `<div class="sb-item" style="--active-c:${c.color}" onclick="setDomain('${c.id}',this)">
+      <div class="sb-pip" style="background:${c.color}"></div>
+      <span style="font-size:11px">${c.icon}</span>${c.label}
+      <span class="sb-ct">${cnt}</span>
+    </div>`;
+  });
+  sb.innerHTML = h;
+}
+
+function setDomain(id, el) {
+  domainFilt = id;
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));
+  el.classList.add('on');
+  render();
+  if (id !== 'all') {
+    const sec = document.getElementById('sec-'+id);
+    if (sec) setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),100);
+  }
+}
+
+function render() {
+  const main = document.getElementById('mainArea');
+  const q = searchQ.toLowerCase();
+  const coreOnly = filterMode === 'core';
+  let total = 0;
+  let html = '';
+
+  CATS.forEach(cat => {
+    if (domainFilt !== 'all' && domainFilt !== cat.id) return;
+    const items = DATA.filter(d => {
+      if (d.cat !== cat.id) return false;
+      if (coreOnly && !d.core) return false;
+      if (q && !(d.title.toLowerCase().includes(q)||d.tagline.toLowerCase().includes(q)||d.en.toLowerCase().includes(q)||(d.desc&&d.desc.toLowerCase().includes(q)))) return false;
+      return true;
+    });
+    if (!items.length) return;
+    total += items.length;
+
+    html += `<div class="cat-section" id="sec-${cat.id}">
+      <div class="cat-header" style="--cat-c:${cat.color};border-color:${cat.color}">
+        <div class="cat-icon" style="background:${cat.bg};color:${cat.color}">${cat.icon}</div>
+        <div class="cat-label-wrap">
+          <div class="cat-num">${cat.num} · ${cat.en}</div>
+          <div class="cat-title">${cat.label}</div>
+        </div>
+        <div class="cat-count">${items.length} KHÁI NIỆM</div>
+      </div>
+      <div class="card-grid${viewMode==='list'?' list':''}">`;
+
+    items.forEach(item => {
+      html += `<div class="ccard" onclick="openModal(${item.id})" style="--cc:${cat.color};--cc-bg:${cat.bg}">
+        <div class="ccard-top">
+          <span class="ccard-num">#${String(item.id).padStart(2,'0')}</span>
+          ${item.core ? '<span class="ccard-badge core">★ Cốt lõi</span>' : ''}
+        </div>
+        <div class="ccard-title">${item.title}</div>
+        <div class="ccard-en">${item.en}</div>
+        <div class="ccard-tagline">${item.tagline}</div>
+        <div class="ccard-notation">${item.notation}</div>
+      </div>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  if (!total) {
+    html = `<div class="empty-state"><h3>Không tìm thấy kết quả</h3><p>Thử từ khoá khác</p></div>`;
+  }
+
+  main.innerHTML = html;
+  document.getElementById('cntBadge').textContent = `${total} khái niệm`;
+}
+
+let modalList = [];
+
+function openModal(id) {
+  const item = DATA.find(d=>d.id===id);
+  if (!item) return;
+  openId = id;
+  const cat = CAT_MAP[item.cat];
+
+  const q = searchQ.toLowerCase();
+  const coreOnly = filterMode === 'core';
+  modalList = DATA.filter(d => {
+    if (domainFilt !== 'all' && d.cat !== domainFilt) return false;
+    if (coreOnly && !d.core) return false;
+    if (q && !(d.title.toLowerCase().includes(q)||d.tagline.toLowerCase().includes(q))) return false;
+    return true;
+  }).map(d=>d.id);
+
+  renderModal(item, cat);
+  document.getElementById('veil').classList.add('open');
+  document.getElementById('modal').scrollTop = 0;
+  document.getElementById('mStripe').style.background = cat.color;
+}
+
+function renderModal(item, cat) {
+  document.getElementById('mHead').innerHTML = `
+    <div class="modal-meta-row">
+      <span class="modal-cat-badge" style="background:${cat.bg};color:${cat.color};border:1px solid ${cat.color}33">${cat.icon} ${cat.label}</span>
+      ${item.core ? '<span class="modal-core">★ Cốt lõi</span>' : ''}
+      <span class="modal-num">#${String(item.id).padStart(2,'0')}</span>
+    </div>
+    <div class="modal-title" style="color:${cat.color}">${item.title}</div>
+    <div class="modal-en">${item.en}</div>
+    <div class="modal-tagline">${item.tagline}</div>
+    <div class="modal-notation-big">${item.notation}</div>`;
+
+  let body = `<div class="msec">
+    <div class="msec-lbl">Giải thích</div>
+    <div class="msec-p">${item.desc}</div>
+  </div>`;
+
+  if (item.points?.length) {
+    body += `<div class="msec"><div class="msec-lbl">Điểm mấu chốt</div>
+      <ul class="msec-list">${item.points.map(p=>`<li>${p}</li>`).join('')}</ul></div>`;
+  }
+  if (item.example) {
+    body += `<div class="msec"><div class="msec-lbl">Ví dụ cụ thể</div>
+      <div class="msec-example"><pre style="font-family:inherit;white-space:pre-wrap;font-size:13.5px">${item.example}</pre></div></div>`;
+  }
+  if (item.formula) {
+    body += `<div class="msec"><div class="msec-lbl">Ký hiệu / Công thức</div>
+      <div class="msec-formula">${item.formula.replace(/\n/g,'<br>')}</div></div>`;
+  }
+  if (item.warning) {
+    body += `<div class="msec"><div class="msec-lbl">Chú ý</div>
+      <div class="msec-warning">⚠ ${item.warning}</div></div>`;
+  }
+  if (item.related?.length) {
+    body += `<div class="msec"><div class="msec-lbl">Liên quan</div>
+      <div class="related-chips">${item.related.map(r=>`<span class="rel-chip" onclick="findOpen('${r}')">${r}</span>`).join('')}</div></div>`;
+  }
+
+  document.getElementById('mBody').innerHTML = body;
+  document.getElementById('mFoot').innerHTML = `
+    <div class="nav-group">
+      <button class="mbtn" onclick="navM(-1)">← Trước</button>
+      <button class="mbtn" onclick="navM(1)">Sau →</button>
+    </div>
+    <button class="mbtn primary" onclick="closeModal()">Đóng</button>`;
+}
+
+function findOpen(title) {
+  const found = DATA.find(d=>d.title.toLowerCase().includes(title.toLowerCase())||d.en.toLowerCase().includes(title.toLowerCase()));
+  if (found) openModal(found.id);
+}
+
+function navM(dir) {
+  const idx = modalList.indexOf(openId);
+  if (idx === -1) return;
+  const nxt = modalList[idx+dir];
+  if (nxt !== undefined) openModal(nxt);
+}
+
+function closeModal() {
+  document.getElementById('veil').classList.remove('open');
+  openId = null;
+}
+
+function veilClick(e) {
+  if (e.target === document.getElementById('veil')) closeModal();
+}
+
+function setView(v) {
+  viewMode = v;
+  document.getElementById('gBtn').classList.toggle('on', v==='grid');
+  document.getElementById('lBtn').classList.toggle('on', v==='list');
+  render();
+}
+
+function bindEvents() {
+  document.getElementById('searchInput').addEventListener('input', e=>{
+    searchQ = e.target.value; render();
+  });
+  document.querySelectorAll('.chip').forEach(c=>{
+    c.addEventListener('click', function(){
+      document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));
+      this.classList.add('active');
+      filterMode = this.dataset.f;
+      render();
+    });
+  });
+  document.addEventListener('keydown', e=>{
+    if (e.key==='Escape') closeModal();
+    if (openId!==null) {
+      if (e.key==='ArrowRight') navM(1);
+      if (e.key==='ArrowLeft') navM(-1);
+    }
+  });
+}
+
+buildSidebar();
+render();
+bindEvents();
+</script>
+</body>
+</html>
